@@ -1,0 +1,6 @@
+gossip_pca
+*.fvec
+data/*
+lib/*
+CMakeFiles/
+CMakeCache.txt
