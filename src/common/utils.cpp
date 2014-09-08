@@ -26,3 +26,20 @@ void fappend(const string& filename, const string& line) {
 		fputs(line.c_str(), f);
 	fclose(f);
 }
+
+string get_config_str(const char* what, const char* default_val) {
+	FILE* f = fopen("config.properties", "r");
+	char line[512];
+	char* c = 0;
+	string v = default_val;
+	while ( fgets (line , 512 , f) != NULL ) {
+	      if(!strncmp(what, line, strlen(what))) {
+	    	  c = line + strlen(what);
+	    	  while(*c==' ' || *c=='=') c++;
+	    	  v = c;
+	      }
+	}
+	fclose(f);
+	v.erase(v.find_last_not_of(" \n\r\t")+1);
+	return v;
+}

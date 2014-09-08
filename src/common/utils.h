@@ -58,4 +58,25 @@ void fappend(const string& filename, const string& line);
 
 #define FATAL(x) do { DBG(x); exit(1); } while(0);
 
+
+
+template <class T> T get_config(const char* what, T default_val) {
+	FILE* f = fopen("config.properties", "r");
+	char line[512];
+	char* c = 0;
+	T v = default_val;
+	while ( fgets (line , 512 , f) != NULL ) {
+	      if(!strncmp(what, line, strlen(what))) {
+	    	  c = line + strlen(what);
+	    	  while(*c==' ' || *c=='=') c++;
+	    	  v = (T) atof(c);
+	      }
+	}
+	fclose(f);
+	return v;
+}
+
+string get_config_str(const char* what, const char* default_val);
+
+
 #endif /* UTILS_H_ */

@@ -27,31 +27,37 @@ set(algebra_dir src/retin/toolbox/algebra)
 file(GLOB algebra_headers ${algebra_dir}/core.h ${algebra_dir}/vector_uchar.h ${algebra_dir}/vector_short.h ${algebra_dir}/vector_float.h ${algebra_dir}/vector_double.h ${algebra_dir}/matrix_float.h  ${algebra_dir}/matrix_double.h ${algebra_dir}/vector.h ${algebra_dir}/matrix.h  ${algebra_dir}/pca.h)
 file(GLOB algebra_sources ${algebra_dir}/core.c ${algebra_dir}/vector_uchar.c ${algebra_dir}/vector_short.c ${algebra_dir}/vector_float.c ${algebra_dir}/vector_double.c ${algebra_dir}/matrix_float.c ${algebra_dir}/matrix_double.c ${algebra_dir}/pca.cpp )
 
+set(imcodec_dir src/retin/toolbox/imcodec)
+file(GLOB imcodec_headers ${imcodec_dir}/ImageCodec.h   ${imcodec_dir}/ImageCodecPNG.h   ${imcodec_dir}/ImageCodecJPEG.h)
+file(GLOB imcodec_sources ${imcodec_dir}/ImageCodec.cpp ${imcodec_dir}/ImageCodecPNG.cpp ${imcodec_dir}/ImageCodecJPEG.cpp)
+
+
 file(GLOB common_sources src/common/math.cpp src/common/matrix.cpp src/common/multithread.cpp src/common/utils.cpp src/common/matrix_float.cpp src/common/matrix_double.cpp src/common/matrixdouble.cpp)
 file(GLOB common_headers src/common/math.h src/common/matrix.h src/common/matrixdouble.h)
 
 
 add_library(retin_algebra ${algebra_sources})
 add_library(retin_core ${core_sources} ${document_sources})
+add_library(retin_imcodec ${imcodec_sources})
 
-add_executable(gossip_pca src/main.cpp ${common_sources})
+add_executable(gossip_svm src/main.cpp ${common_sources})
 
-set(retin_libs pthread retin_core retin_algebra)
+set(retin_libs pthread retin_core retin_algebra retin_imcodec)
 
-target_link_libraries(gossip_pca ${retin_libs})
+target_link_libraries(gossip_svm ${retin_libs})
 
 
 find_package(PNG)
 if(PNG_FOUND)
 	include_directories(${PNG_INCLUDE_DIR})
-	target_link_libraries(gossip_pca ${PNG_LIBRARIES} )
+	target_link_libraries(gossip_svm ${PNG_LIBRARIES} )
 	add_definitions(-DRETIN_ENABLE_PNG)
 endif(PNG_FOUND)
 
 find_package(JPEG)
 if(JPEG_FOUND)
 	include_directories(${JPEG_INCLUDE_DIR})
-	target_link_libraries(gossip_pca ${JPEG_LIBRARIES} )
+	target_link_libraries(gossip_svm ${JPEG_LIBRARIES} )
 	add_definitions(-DRETIN_ENABLE_JPEG)
 endif(JPEG_FOUND)
 
