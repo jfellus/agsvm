@@ -4,3 +4,6 @@ data/*
 lib/*
 CMakeFiles/
 CMakeCache.txt
+.cproject
+.project
+.*
