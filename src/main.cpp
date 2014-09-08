@@ -29,6 +29,8 @@ int n = get_config("n", 100);
 int D = get_config("D", 2);
 string dataset = get_config_str("dataset", "data.jpg");
 
+float LAMBDA = get_config("LAMBDA", 0.1);
+
 int T_MAX = get_config("T_MAX", 1000);
 int NB_NEIGHBORS = get_config("NB_NEIGHBORS", -1);
 int NB_EDGES = 0;
@@ -38,11 +40,11 @@ int NB_EDGES = 0;
 // DATA //
 //////////
 
-Matrix X;
-bool* y;
+Matrix X; // Sample
+int* y; // Labels
 
-Matrix w;
-float b;
+float learningRate = 1;
+
 
 int t = 0;
 
@@ -64,8 +66,23 @@ class Node {
 public:
 	int id;
 
+	Matrix X;
+	int* y;
+	Matrix w;
+	float b;
+	int n;
+
+
 	Node() {this->id = __node_last_id++;}
-	void init(Matrix& X, int first, int n) {
+	void init(Matrix& X, int* y, int first, int n) {
+		this->y = new int[n];
+		memcpy(this->y, &y[first], sizeof(int)*n);
+		this->X.create_ref(&X[first*X.width],X.width,n);
+
+		w.create(D, 1);
+		b = 0;
+
+		this->n = n;
 	}
 
 	~Node() {}
@@ -76,24 +93,44 @@ public:
 	void init_gossip() {
 	}
 
-//	int send(Node& node) {
-//		node.receive(U,L,mu,w);
-//		return 0;
-//	}
-//
-//	void receive(Matrix& U2, Matrix& L2, Matrix& mu2, float w2) {
-//		Matrix cr(D,D);
-//		cr.reconstruct(U2,L2);
-//
-//		w += w2;	mu += mu2;		C += cr;
-//	}
-//
+	void iteration() {
+		optimize();
+
+		// Send
+		last_receiver = gossip_choose_receiver();
+		send(node[last_receiver]);
+	}
+
+	void optimize() {
+		int i = rand()%n;
+		float* sample = X.get_row(i);
+		if( y[i] * vector_ps_float(w, sample, D) < 1) {
+			for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] + learningRate*y[i]*sample[d];
+		} else {
+			for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d];
+		}
+	}
+
+	int send(Node& node) {
+
+
+		node.receive(0);
+		return 0;
+	}
+
+	void receive(int arg) {
+		// TODO
+	}
+
 
 	void compute_estimate() {
 	}
 
 
-	// CONNECTIVITY
+	//////////////////
+	// CONNECTIVITY //
+	//////////////////
+
 	int* neighbors;
 	int nbNeighbors;
 
@@ -107,6 +144,7 @@ public:
 	}
 
 	int gossip_choose_receiver() {
+		if(N==1) return 0;
 		if(is_network_complete()) {
 			int r = rand()%(N-1);
 			if(r>=id) r++;
@@ -122,26 +160,18 @@ public:
 
 #include "misc.cpp"
 
-/////////////////////
-
-void gossip() {
-	last_sender = gossip_choose_sender();
-	last_receiver = node[last_sender].gossip_choose_receiver();
-
-//	last_nb_projs_sent = node[last_sender].send(node[last_receiver]);
-
-//	last_msg_size = (last_nb_projs_sent+1)*(D+1);
-//	total_msg_size += last_msg_size;
-
-//	fappend("data/stats/total_msg_size.txt",fmt("%d\n",total_msg_size));
-//	fappend("data/stats/nb_projs_sent.txt",fmt("%d\n",last_nb_projs_sent));
-//	fappend("data/stats/total_msg_size_N.txt",fmt("%f %f\n",(float)t/N, (float)total_msg_size/N));
-}
 
 
 //////////
 // DUMP //
 //////////
+
+
+void dump_classifier() {
+	FILE* f = fopen(fmt("data/classifier_%u.txt", t), "w");
+	fprintf(f, "%f %f %f", node[0].w[0], node[0].w[1], node[0].b);
+	fclose(f);
+}
 
 void compute_errors() {
 	if(last_sender!=-1) node[last_sender].compute_estimate();
@@ -154,8 +184,9 @@ void compute_errors() {
 //	REC /= (N*FCnorm);
 
 //	fappend("data/E.txt", fmt("%f\n", REC));
-}
 
+	dump_classifier();
+}
 
 
 
@@ -176,10 +207,10 @@ void init(const char* datafile) {
 
 	int ndo = 0;
 	for(int i=0; i<N-1; i++) {
-		node[i].init(X, ndo, n/N);
+		node[i].init(X, y, ndo, n/N);
 		ndo += n/N;
 	}
-	node[N-1].init(X,ndo, n-ndo);
+	node[N-1].init(X, y, ndo, n-ndo);
 
 	DBGV(N);
 	DBGV(D);
@@ -198,7 +229,7 @@ int main(int argc, char **argv) {
 		//chdir(dirname(argv[1]));
 	}
 
-//	if(system("mkdir -p data")) {}
+	if(system("mkdir -p data")) {}
 
 	DBG_END();
 
@@ -206,9 +237,14 @@ int main(int argc, char **argv) {
 
 	for(int i=0; i<N; i++) node[i].init_gossip();
 
-	for(t=0; t<T_MAX; t++) {
+	for(t=1; t<T_MAX; t++) {
 		DBGV(t);
-		gossip();
+
+		// PEGASOS GLOBAL LEARNING RATE = 1/(lambda*t)
+		learningRate = 1/(LAMBDA*t);
+
+		last_sender = gossip_choose_sender();
+		node[last_sender].iteration();
 		compute_errors();
 	}
 

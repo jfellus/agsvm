@@ -52,7 +52,7 @@ using namespace std;
 #define DBG_PERCENT(x) DBGN((int)((float)x*1000)/10.0f << "%")
 
 string stringprintf(const char* fmt, ...);
-#define fmt(x...) stringprintf(x)
+#define fmt(x...) stringprintf(x).c_str()
 
 void fappend(const string& filename, const string& line);
 
