@@ -35,6 +35,9 @@ CMAKE_COMMAND = /usr/bin/cmake
 # The command to remove a file.
 RM = /usr/bin/cmake -E remove -f
 
+# Escaping for special characters.
+EQUALS = =
+
 # The top-level source directory on which CMake was run.
 CMAKE_SOURCE_DIR = /home/jfellus/Documents/These/prog/agsvm
 
@@ -96,17 +99,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named gossip_pca
+# Target rules for targets named gossip_svm
 
 # Build rule for target.
-gossip_pca: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 gossip_pca
-.PHONY : gossip_pca
+gossip_svm: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 gossip_svm
+.PHONY : gossip_svm
 
 # fast build rule for target.
-gossip_pca/fast:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/build
-.PHONY : gossip_pca/fast
+gossip_svm/fast:
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/build
+.PHONY : gossip_svm/fast
 
 #=============================================================================
 # Target rules for targets named retin_algebra
@@ -134,12 +137,25 @@ retin_core/fast:
 	$(MAKE) -f CMakeFiles/retin_core.dir/build.make CMakeFiles/retin_core.dir/build
 .PHONY : retin_core/fast
 
+#=============================================================================
+# Target rules for targets named retin_imcodec
+
+# Build rule for target.
+retin_imcodec: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 retin_imcodec
+.PHONY : retin_imcodec
+
+# fast build rule for target.
+retin_imcodec/fast:
+	$(MAKE) -f CMakeFiles/retin_imcodec.dir/build.make CMakeFiles/retin_imcodec.dir/build
+.PHONY : retin_imcodec/fast
+
 src/common/math.o: src/common/math.cpp.o
 .PHONY : src/common/math.o
 
 # target to build an object file
 src/common/math.cpp.o:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/common/math.cpp.o
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/math.cpp.o
 .PHONY : src/common/math.cpp.o
 
 src/common/math.i: src/common/math.cpp.i
@@ -147,7 +163,7 @@ src/common/math.i: src/common/math.cpp.i
 
 # target to preprocess a source file
 src/common/math.cpp.i:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/common/math.cpp.i
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/math.cpp.i
 .PHONY : src/common/math.cpp.i
 
 src/common/math.s: src/common/math.cpp.s
@@ -155,7 +171,7 @@ src/common/math.s: src/common/math.cpp.s
 
 # target to generate assembly for a file
 src/common/math.cpp.s:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/common/math.cpp.s
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/math.cpp.s
 .PHONY : src/common/math.cpp.s
 
 src/common/matrix_double.o: src/common/matrix_double.cpp.o
@@ -163,7 +179,7 @@ src/common/matrix_double.o: src/common/matrix_double.cpp.o
 
 # target to build an object file
 src/common/matrix_double.cpp.o:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/common/matrix_double.cpp.o
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/matrix_double.cpp.o
 .PHONY : src/common/matrix_double.cpp.o
 
 src/common/matrix_double.i: src/common/matrix_double.cpp.i
@@ -171,7 +187,7 @@ src/common/matrix_double.i: src/common/matrix_double.cpp.i
 
 # target to preprocess a source file
 src/common/matrix_double.cpp.i:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/common/matrix_double.cpp.i
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/matrix_double.cpp.i
 .PHONY : src/common/matrix_double.cpp.i
 
 src/common/matrix_double.s: src/common/matrix_double.cpp.s
@@ -179,7 +195,7 @@ src/common/matrix_double.s: src/common/matrix_double.cpp.s
 
 # target to generate assembly for a file
 src/common/matrix_double.cpp.s:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/common/matrix_double.cpp.s
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/matrix_double.cpp.s
 .PHONY : src/common/matrix_double.cpp.s
 
 src/common/matrix_float.o: src/common/matrix_float.cpp.o
@@ -187,7 +203,7 @@ src/common/matrix_float.o: src/common/matrix_float.cpp.o
 
 # target to build an object file
 src/common/matrix_float.cpp.o:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/common/matrix_float.cpp.o
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/matrix_float.cpp.o
 .PHONY : src/common/matrix_float.cpp.o
 
 src/common/matrix_float.i: src/common/matrix_float.cpp.i
@@ -195,7 +211,7 @@ src/common/matrix_float.i: src/common/matrix_float.cpp.i
 
 # target to preprocess a source file
 src/common/matrix_float.cpp.i:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/common/matrix_float.cpp.i
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/matrix_float.cpp.i
 .PHONY : src/common/matrix_float.cpp.i
 
 src/common/matrix_float.s: src/common/matrix_float.cpp.s
@@ -203,7 +219,7 @@ src/common/matrix_float.s: src/common/matrix_float.cpp.s
 
 # target to generate assembly for a file
 src/common/matrix_float.cpp.s:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/common/matrix_float.cpp.s
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/matrix_float.cpp.s
 .PHONY : src/common/matrix_float.cpp.s
 
 src/common/multithread.o: src/common/multithread.cpp.o
@@ -211,7 +227,7 @@ src/common/multithread.o: src/common/multithread.cpp.o
 
 # target to build an object file
 src/common/multithread.cpp.o:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/common/multithread.cpp.o
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/multithread.cpp.o
 .PHONY : src/common/multithread.cpp.o
 
 src/common/multithread.i: src/common/multithread.cpp.i
@@ -219,7 +235,7 @@ src/common/multithread.i: src/common/multithread.cpp.i
 
 # target to preprocess a source file
 src/common/multithread.cpp.i:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/common/multithread.cpp.i
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/multithread.cpp.i
 .PHONY : src/common/multithread.cpp.i
 
 src/common/multithread.s: src/common/multithread.cpp.s
@@ -227,7 +243,7 @@ src/common/multithread.s: src/common/multithread.cpp.s
 
 # target to generate assembly for a file
 src/common/multithread.cpp.s:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/common/multithread.cpp.s
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/multithread.cpp.s
 .PHONY : src/common/multithread.cpp.s
 
 src/common/utils.o: src/common/utils.cpp.o
@@ -235,7 +251,7 @@ src/common/utils.o: src/common/utils.cpp.o
 
 # target to build an object file
 src/common/utils.cpp.o:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/common/utils.cpp.o
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/utils.cpp.o
 .PHONY : src/common/utils.cpp.o
 
 src/common/utils.i: src/common/utils.cpp.i
@@ -243,7 +259,7 @@ src/common/utils.i: src/common/utils.cpp.i
 
 # target to preprocess a source file
 src/common/utils.cpp.i:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/common/utils.cpp.i
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/utils.cpp.i
 .PHONY : src/common/utils.cpp.i
 
 src/common/utils.s: src/common/utils.cpp.s
@@ -251,7 +267,7 @@ src/common/utils.s: src/common/utils.cpp.s
 
 # target to generate assembly for a file
 src/common/utils.cpp.s:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/common/utils.cpp.s
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/utils.cpp.s
 .PHONY : src/common/utils.cpp.s
 
 src/main.o: src/main.cpp.o
@@ -259,7 +275,7 @@ src/main.o: src/main.cpp.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/main.cpp.o
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -267,7 +283,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/main.cpp.i
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -275,7 +291,7 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) -f CMakeFiles/gossip_pca.dir/build.make CMakeFiles/gossip_pca.dir/src/main.cpp.s
+	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
 src/retin/toolbox/algebra/core.o: src/retin/toolbox/algebra/core.c.o
@@ -590,6 +606,78 @@ src/retin/toolbox/core/sharedmem/shared_mem.cpp.s:
 	$(MAKE) -f CMakeFiles/retin_core.dir/build.make CMakeFiles/retin_core.dir/src/retin/toolbox/core/sharedmem/shared_mem.cpp.s
 .PHONY : src/retin/toolbox/core/sharedmem/shared_mem.cpp.s
 
+src/retin/toolbox/imcodec/ImageCodec.o: src/retin/toolbox/imcodec/ImageCodec.cpp.o
+.PHONY : src/retin/toolbox/imcodec/ImageCodec.o
+
+# target to build an object file
+src/retin/toolbox/imcodec/ImageCodec.cpp.o:
+	$(MAKE) -f CMakeFiles/retin_imcodec.dir/build.make CMakeFiles/retin_imcodec.dir/src/retin/toolbox/imcodec/ImageCodec.cpp.o
+.PHONY : src/retin/toolbox/imcodec/ImageCodec.cpp.o
+
+src/retin/toolbox/imcodec/ImageCodec.i: src/retin/toolbox/imcodec/ImageCodec.cpp.i
+.PHONY : src/retin/toolbox/imcodec/ImageCodec.i
+
+# target to preprocess a source file
+src/retin/toolbox/imcodec/ImageCodec.cpp.i:
+	$(MAKE) -f CMakeFiles/retin_imcodec.dir/build.make CMakeFiles/retin_imcodec.dir/src/retin/toolbox/imcodec/ImageCodec.cpp.i
+.PHONY : src/retin/toolbox/imcodec/ImageCodec.cpp.i
+
+src/retin/toolbox/imcodec/ImageCodec.s: src/retin/toolbox/imcodec/ImageCodec.cpp.s
+.PHONY : src/retin/toolbox/imcodec/ImageCodec.s
+
+# target to generate assembly for a file
+src/retin/toolbox/imcodec/ImageCodec.cpp.s:
+	$(MAKE) -f CMakeFiles/retin_imcodec.dir/build.make CMakeFiles/retin_imcodec.dir/src/retin/toolbox/imcodec/ImageCodec.cpp.s
+.PHONY : src/retin/toolbox/imcodec/ImageCodec.cpp.s
+
+src/retin/toolbox/imcodec/ImageCodecJPEG.o: src/retin/toolbox/imcodec/ImageCodecJPEG.cpp.o
+.PHONY : src/retin/toolbox/imcodec/ImageCodecJPEG.o
+
+# target to build an object file
+src/retin/toolbox/imcodec/ImageCodecJPEG.cpp.o:
+	$(MAKE) -f CMakeFiles/retin_imcodec.dir/build.make CMakeFiles/retin_imcodec.dir/src/retin/toolbox/imcodec/ImageCodecJPEG.cpp.o
+.PHONY : src/retin/toolbox/imcodec/ImageCodecJPEG.cpp.o
+
+src/retin/toolbox/imcodec/ImageCodecJPEG.i: src/retin/toolbox/imcodec/ImageCodecJPEG.cpp.i
+.PHONY : src/retin/toolbox/imcodec/ImageCodecJPEG.i
+
+# target to preprocess a source file
+src/retin/toolbox/imcodec/ImageCodecJPEG.cpp.i:
+	$(MAKE) -f CMakeFiles/retin_imcodec.dir/build.make CMakeFiles/retin_imcodec.dir/src/retin/toolbox/imcodec/ImageCodecJPEG.cpp.i
+.PHONY : src/retin/toolbox/imcodec/ImageCodecJPEG.cpp.i
+
+src/retin/toolbox/imcodec/ImageCodecJPEG.s: src/retin/toolbox/imcodec/ImageCodecJPEG.cpp.s
+.PHONY : src/retin/toolbox/imcodec/ImageCodecJPEG.s
+
+# target to generate assembly for a file
+src/retin/toolbox/imcodec/ImageCodecJPEG.cpp.s:
+	$(MAKE) -f CMakeFiles/retin_imcodec.dir/build.make CMakeFiles/retin_imcodec.dir/src/retin/toolbox/imcodec/ImageCodecJPEG.cpp.s
+.PHONY : src/retin/toolbox/imcodec/ImageCodecJPEG.cpp.s
+
+src/retin/toolbox/imcodec/ImageCodecPNG.o: src/retin/toolbox/imcodec/ImageCodecPNG.cpp.o
+.PHONY : src/retin/toolbox/imcodec/ImageCodecPNG.o
+
+# target to build an object file
+src/retin/toolbox/imcodec/ImageCodecPNG.cpp.o:
+	$(MAKE) -f CMakeFiles/retin_imcodec.dir/build.make CMakeFiles/retin_imcodec.dir/src/retin/toolbox/imcodec/ImageCodecPNG.cpp.o
+.PHONY : src/retin/toolbox/imcodec/ImageCodecPNG.cpp.o
+
+src/retin/toolbox/imcodec/ImageCodecPNG.i: src/retin/toolbox/imcodec/ImageCodecPNG.cpp.i
+.PHONY : src/retin/toolbox/imcodec/ImageCodecPNG.i
+
+# target to preprocess a source file
+src/retin/toolbox/imcodec/ImageCodecPNG.cpp.i:
+	$(MAKE) -f CMakeFiles/retin_imcodec.dir/build.make CMakeFiles/retin_imcodec.dir/src/retin/toolbox/imcodec/ImageCodecPNG.cpp.i
+.PHONY : src/retin/toolbox/imcodec/ImageCodecPNG.cpp.i
+
+src/retin/toolbox/imcodec/ImageCodecPNG.s: src/retin/toolbox/imcodec/ImageCodecPNG.cpp.s
+.PHONY : src/retin/toolbox/imcodec/ImageCodecPNG.s
+
+# target to generate assembly for a file
+src/retin/toolbox/imcodec/ImageCodecPNG.cpp.s:
+	$(MAKE) -f CMakeFiles/retin_imcodec.dir/build.make CMakeFiles/retin_imcodec.dir/src/retin/toolbox/imcodec/ImageCodecPNG.cpp.s
+.PHONY : src/retin/toolbox/imcodec/ImageCodecPNG.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -597,10 +685,11 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
-	@echo "... gossip_pca"
+	@echo "... gossip_svm"
 	@echo "... rebuild_cache"
 	@echo "... retin_algebra"
 	@echo "... retin_core"
+	@echo "... retin_imcodec"
 	@echo "... src/common/math.o"
 	@echo "... src/common/math.i"
 	@echo "... src/common/math.s"
@@ -658,6 +747,15 @@ help:
 	@echo "... src/retin/toolbox/core/sharedmem/shared_mem.o"
 	@echo "... src/retin/toolbox/core/sharedmem/shared_mem.i"
 	@echo "... src/retin/toolbox/core/sharedmem/shared_mem.s"
+	@echo "... src/retin/toolbox/imcodec/ImageCodec.o"
+	@echo "... src/retin/toolbox/imcodec/ImageCodec.i"
+	@echo "... src/retin/toolbox/imcodec/ImageCodec.s"
+	@echo "... src/retin/toolbox/imcodec/ImageCodecJPEG.o"
+	@echo "... src/retin/toolbox/imcodec/ImageCodecJPEG.i"
+	@echo "... src/retin/toolbox/imcodec/ImageCodecJPEG.s"
+	@echo "... src/retin/toolbox/imcodec/ImageCodecPNG.o"
+	@echo "... src/retin/toolbox/imcodec/ImageCodecPNG.i"
+	@echo "... src/retin/toolbox/imcodec/ImageCodecPNG.s"
 .PHONY : help
 
 

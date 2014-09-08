@@ -96,7 +96,6 @@ void write_jpeg(FILE* f, unsigned char* buffer, size_t w, size_t h, float min=0,
 	row_stride = w * 3;
 
 	row_pointer[0] = new JSAMPLE[row_stride];
-	unsigned char c[3];
 	while (cinfo.next_scanline < cinfo.image_height) {
 		for(int i=0; i<w*3; i++) {
 			row_pointer[0][i] = buffer[cinfo.next_scanline * w * 3 + i];

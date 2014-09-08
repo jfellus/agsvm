@@ -4,8 +4,9 @@
  *  Created on: 13 nov. 2013
  *      Author: jfellus
  */
+#include "retin/toolbox/imcodec/ImageCodec.h"
 
-
+using namespace retin;
 
 
 ///////////
@@ -47,48 +48,35 @@ void create_network() {
 }
 
 
-
-
-void init(const char* datafile) {
-	DBG("INIT");
-	DBGV(NBTHREADS);
-	system("rm -rf data/*");
-	system("rm -rf plots/*");
-
-	X.load(datafile);
-	if(LIMIT_NDATA!=-1 && X.height > LIMIT_NDATA) X.height = LIMIT_NDATA;
-	n = X.height;
-	D = X.width;
-
-	global_mu.create(D,1);
-
-	FULL_COVARIANCE.create(D,D);
-	FULL_COVARIANCE_th.create(D,D);
-
-
-	node = new Node[N];
-	create_network();
-
-	int ndo = 0;
-	for(int i=0; i<N-1; i++) {
-		node[i].init(X, ndo, n/N);
-		ndo += n/N;
-	}
-	node[N-1].init(X,ndo, n-ndo);
-
-//	mat_plotall.create((D+1)*(int)(sqrt(N)+1),(D+1)*(int)(sqrt(N)+1));
-
-	DBGV(LIMIT_NDATA);
-	DBGV(N);
-	DBGV(D);
-	DBGV(n);
-	if(USE_ENERGY) {DBGV(KEEP_ENERGY);}
-	else {DBGV(q);}
+bool str_has_extension(const char* s, const char* e) {
+	if(strlen(s)-2-strlen(e) < 0 || s[strlen(s)-2-strlen(e)]!='.') return false;
+	return !strcmp(&s[strlen(s)-1-strlen(e)], e);
 }
-
 
 
 
 void deinit() {
 	delete[] node;
+}
+
+
+
+
+
+void loadClassesFromJpg(const char* datafile) {
+	string s = datafile;
+	unsigned char* pxl;
+	unsigned char* palette;
+	size_t w,h,c;
+	loadImage(pxl, palette, w,h,c, s);
+	X.create(2, n);
+	y = new bool[n];
+	for(int i=0; i<n; i++) {
+		size_t _x = rand()%w;
+		size_t _y = rand()%h;
+		X.get_row(i)[0] = _x;
+		X.get_row(i)[1] = _y;
+		unsigned char* p = &pxl[(_y*w + _x)*3];
+		y[i] =  (p[0] > 128);
+	}
 }
