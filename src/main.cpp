@@ -124,7 +124,7 @@ public:
 	// Overall Hinge loss = sum_{x,y} max(0,1-y<w,x>)
 	float hinge_loss() {
 		float E = 0;
-		for(int i=0; i<::n; i++) E += hinge_loss(::X.get_row(i), ::y[i], w);
+		for(int i=0; i< ::n; i++) E += hinge_loss(::X.get_row(i), ::y[i], w);
 		return E / ::n;
 	}
 
@@ -183,7 +183,7 @@ public:
 	Matrix averagedGradient;
 	void SAG(float learningRate) {
 		if(!gradientsMemory) {
-			gradientsMemory.create(D, n); gradientsMemory.clear();
+			gradientsMemory.create(n, 1); gradientsMemory.clear();
 			averagedGradient.create(D, 1); averagedGradient.clear();
 		}
 
@@ -191,15 +191,12 @@ public:
 		float* sample = X.get_row(i);
 
 		// Update averaged gradient
-		for(int d=0; d<D; d++) averagedGradient[d] -= gradientsMemory[i*D+d];
-		if( y[i] * vector_ps_float(w, sample, D) < 1) {
-			for(int d=0; d<D; d++) gradientsMemory[i*D + d] = (LAMBDA*w[d] - y[i]*sample[d]);
-		} else {
-			for(int d=0; d<D; d++) gradientsMemory[i*D + d] = LAMBDA * w[d];
-		}
-		for(int d=0; d<D; d++) averagedGradient[d] += gradientsMemory[i*D+d];
+		for(int d=0; d<D; d++) averagedGradient[d] -= gradientsMemory[i] * y[i] * sample[d];
+		gradientsMemory[i] = (y[i]*vector_ps_float(w, sample, D)) < 1 ? -1 : 0;
+		for(int d=0; d<D; d++) averagedGradient[d] += gradientsMemory[i] * y[i] * sample[d];
 
 		// Learn
+		for(int d=0; d<D; d++) w[d] *= (1 - learningRate * LAMBDA);
 		for(int d=0; d<D; d++) w[d] -= learningRate / n * averagedGradient[d];
 	}
 
@@ -256,10 +253,10 @@ public:
 	void optimize() {
 
 		// Choose algorithm here
-			 pegasos();
+			// pegasos();
 		 	 //SGD(0.00001);
-			 //SAG(0.1);
-			// STAG(0.1);
+			// SAG(0.1);
+			 STAG(0.1);
 			// DA(0.1/(LAMBDA*iterations));
 		iterations++;
 
