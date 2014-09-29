@@ -20,6 +20,8 @@
 #include <libgen.h>
 
 
+
+#define MAX(a,b) (((a) > (b)) ? (a) : (b))
 using namespace std;
 
 #define DBG_START(x) \
@@ -37,6 +39,8 @@ using namespace std;
 	do {CRITICAL_BEGIN(); \
 	std::cout << x << "\n"; fflush(stdout); \
 	CRITICAL_END();}while(0);
+
+void DBGVECTOR(float* x, int D);
 
 #define DBGV(x) \
 	CRITICAL_BEGIN(); \

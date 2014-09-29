@@ -233,6 +233,7 @@ bool Matrix::read(const char* file) {
     else if (string_has_file_ext(file_name,".bin16")) reader = new bin_reader(file);
     else if (string_has_file_ext(file_name,".peter8")) reader = new peter8_reader(file);
     else if (string_has_file_ext(file_name,".idx3-ubyte")) reader = new idx3_ubyte_reader(file);
+    else if (string_has_file_ext(file_name,".idx1-ubyte")) reader = new idx1_ubyte_reader(file);
 
 	if(!reader) throw "No reader for this file format";
 

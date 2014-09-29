@@ -144,6 +144,39 @@ void idx3_ubyte_reader::read (float*& data,size_t truncateDim) {
 }
 
 
+///////////////////////////////
+// IDX1 UBYTE READER METHODS //
+///////////////////////////////
+
+idx1_ubyte_reader::idx1_ubyte_reader(const char* filename) : matrix_reader<float>(filename, true),w(0),h(0) {
+	if (this->in.fail())    throw std::runtime_error("Input stream error 0");
+
+	uint32_t x = 0;
+
+	this->in.read((char*)&x,sizeof(x));
+	if (this->in.fail())    throw std::runtime_error("Input stream error 1");
+
+	w = 1;
+	this->in.read((char*)&x,sizeof(x));
+	h = change_endian(x);
+
+	std::cout << "D=" << w << "\n";
+}
+
+idx1_ubyte_reader::~idx1_ubyte_reader() {}
+
+size_t idx1_ubyte_reader::get_height() {return h;}
+size_t idx1_ubyte_reader::get_width() {return w;}
+
+void idx1_ubyte_reader::read (float*& data,size_t truncateDim) {
+	for(int i=0; i<w*h; i++) {
+		uint8_t temp;
+		in.read((char*)&temp, sizeof(temp));
+		data[i] = temp;
+	}
+}
+
+
 //////////////////////////
 // hvec8_reader methods //
 //////////////////////////

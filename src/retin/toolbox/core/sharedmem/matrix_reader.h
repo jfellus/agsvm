@@ -230,6 +230,24 @@ protected:
 	size_t w, h;
 };
 
+///////////////////////
+// IDX1 UBYTE READER //
+///////////////////////
+
+class idx1_ubyte_reader: public matrix_reader<float> {
+public:
+	idx1_ubyte_reader(const char* filename);
+	virtual ~idx1_ubyte_reader();
+
+	virtual size_t get_height();
+	virtual size_t get_width();
+
+	virtual void read(float*& buffer, size_t truncateDim = 0);
+
+protected:
+	size_t w, h;
+};
+
 /////////////// TEMPLATE METHODS ///////////////
 
 ////////////////////////

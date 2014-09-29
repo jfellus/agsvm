@@ -79,7 +79,7 @@ void loadClassesFromJpg(const char* datafile) {
 	size_t w,h,c;
 
 	X.create(2, n);
-	y = new int[n];
+	y.create(1, n);
 
 	loadImage(pxl, palette, w,h,c, s);
 
@@ -96,5 +96,29 @@ void loadClassesFromJpg(const char* datafile) {
 	dumpXY("data.txt");
 }
 
+void loadTestClassesFromJpg(const char* datafile) {
+	DBG("Load test data from JPEG : " << datafile);
+	DBGV(n);
+	string s = datafile;
+	unsigned char* pxl;
+	unsigned char* palette;
+	size_t w,h,c;
 
+	X_test.create(2, n);
+	y_test.create(1, n);
+
+	loadImage(pxl, palette, w,h,c, s);
+
+
+	for(int i=0; i<n; i++) {
+		size_t _x = rand()%w;
+		size_t _y = rand()%h;
+		X.get_row(i)[0] = _x;
+		X.get_row(i)[1] = _y;
+		unsigned char* p = &pxl[((h-_y-1)*w + _x)*3];
+		y[i] =  (p[0] > 128) ? 1 : -1;
+	}
+
+	dumpXY("data_test.txt");
+}
 

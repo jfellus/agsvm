@@ -35,11 +35,20 @@ string get_config_str(const char* what, const char* default_val) {
 	while ( fgets (line , 512 , f) != NULL ) {
 	      if(!strncmp(what, line, strlen(what))) {
 	    	  c = line + strlen(what);
+	    	  if(*c!=' ' && *c!='=') continue;
 	    	  while(*c==' ' || *c=='=') c++;
 	    	  v = c;
+	    	  break;
 	      }
 	}
 	fclose(f);
 	v.erase(v.find_last_not_of(" \n\r\t")+1);
 	return v;
+}
+
+
+void DBGVECTOR(float* x, int D) {
+	printf("[");
+	for(int i=0; i<D; i++) printf(" %f", x[i]);
+	printf(" ]\n");
 }
