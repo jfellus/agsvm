@@ -236,7 +236,7 @@ public:
 		averagedGradient += gradientsMemory[i];
 
 		// Learn
-		w *= (1 - learningRate * LAMBDA);
+//		w *= (1 - learningRate * LAMBDA);
 		w -= (learningRate / n) * averagedGradient;
 	}
 
