@@ -193,16 +193,9 @@ public:
 		}
 	}
 
-	void project_on_L2_ball() {
-		float n2p2 = vector_n2p2_float(w, D);
-		if(n2p2 > 1.0/LAMBDA) {
-			vector_smul_float(w, 1.0/sqrtf(n2p2) * 1.0/sqrtf(LAMBDA), D );
-		}
-	}
 
 	void pegasos() {
 		SGD(LEARNING_RATE/(LAMBDA*iterations)); // Except learning rate, its a classical SGD (projection ?)
-		//project_on_L2_ball();
 	}
 
 	int* shuffled_indices;
@@ -244,12 +237,13 @@ public:
 		vector_add_float(averagedGradient,gradientsMemory.get_row(i), D);
 
 		// Learn
-		for(int d=0; d<D; d++) w[d] *= (1 - learningRate * LAMBDA);
+	//	for(int d=0; d<D; d++) w[d] *= (1 - learningRate * LAMBDA);
 		for(int d=0; d<D; d++) w[d] -= learningRate / n * averagedGradient[d];
 	}
 
 	int curi;
 	void STAG(float learningRate) {
+		DBG("STAG");
 		if(!gradientsMemory) {
 			curi = 0;
 			gradientsMemory.create(D, STAG_BUFFER_SIZE); gradientsMemory.clear();
@@ -259,7 +253,11 @@ public:
 		int i = draw_sample();
 		float* sample = X.get_row(i);
 
-		int lasti = (curi+STAG_BUFFER_SIZE-1)%STAG_BUFFER_SIZE;
+		int lasti = (curi+STAG_BUFFER_SIZE+1)%STAG_BUFFER_SIZE;
+		DBGV(curi);
+		DBGV(lasti);
+		DBGV(i);
+		sleep(1);
 
 		// Update averaged gradient
 		for(int d=0; d<D; d++) averagedGradient[d] -= gradientsMemory[lasti*D+d];
@@ -273,7 +271,7 @@ public:
 		curi = (curi+1)%STAG_BUFFER_SIZE;
 
 		// Learn
-		for(int d=0; d<D; d++) w[d] -= learningRate / n * averagedGradient[d];
+		for(int d=0; d<D; d++) w[d] -= learningRate / STAG_BUFFER_SIZE * averagedGradient[d];
 	}
 
 	void DA(float learningRate) {
