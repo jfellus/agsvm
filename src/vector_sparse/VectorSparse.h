@@ -39,18 +39,23 @@ typedef struct {
 class VectorSparse {
 public:
 	std::list<entry> entries;
-	uint width = 0;
+	uint width;
 
-	double* dense = NULL;
-	uint dense_d = 0;
-	bool bUpdateDense = true;
+	double* dense;
+	uint dense_d;
+	bool bUpdateDense;
 public:
-	VectorSparse() {}
+	VectorSparse() {init();}
 	virtual ~VectorSparse() {}
-	VectorSparse(const VectorSparse& v) {(*this)=v;	}
-	VectorSparse(float* v, size_t dim) {set(v,dim);}
-	VectorSparse(const MatrixFloat& m) {set(m.data,m.width*m.height);}
+	VectorSparse(const VectorSparse& v) {init();(*this)=v;	}
+	VectorSparse(float* v, size_t dim) {init();set(v,dim);}
+	VectorSparse(const MatrixFloat& m) {init(); set(m.data,m.width*m.height);}
 
+
+	void init() {
+		dense = NULL; dense_d = 0; bUpdateDense = true;
+		width = 0;
+	}
 
 	double get(size_t i) {
 		for(auto j = entries.begin(); j!=entries.end(); j++) {
