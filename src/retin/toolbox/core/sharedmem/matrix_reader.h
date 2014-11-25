@@ -505,3 +505,15 @@ template<class T> void general_bin_reader<T>::read(T*& data,
 	}
 }
 #endif
+
+
+class svm_reader : public matrix_reader<float> {
+public:
+	svm_reader(const char* filename);
+	virtual ~svm_reader();
+
+	virtual size_t get_height();
+	virtual size_t get_width();
+
+	virtual void read(float*& buffer, size_t truncateDim = 0);
+};

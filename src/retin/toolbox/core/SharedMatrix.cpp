@@ -205,6 +205,7 @@ Matrix::~Matrix() {
 }
 
 void Matrix::dealloc() {
+	if(bDontDelete) return;
 	fflush(stdout);
 	if(!data) return;
 	if(!bShared) {
@@ -234,6 +235,7 @@ bool Matrix::read(const char* file) {
     else if (string_has_file_ext(file_name,".peter8")) reader = new peter8_reader(file);
     else if (string_has_file_ext(file_name,".idx3-ubyte")) reader = new idx3_ubyte_reader(file);
     else if (string_has_file_ext(file_name,".idx1-ubyte")) reader = new idx1_ubyte_reader(file);
+    else if (string_has_file_ext(file_name,".svm")) reader = new svm_reader(file);
 
 	if(!reader) throw "No reader for this file format";
 
@@ -276,7 +278,7 @@ bool Matrix::write(const char* file) const {
 }
 
 
-void Matrix::dump(size_t nbrows, size_t nbcols) {
+void Matrix::dump(size_t nbrows, size_t nbcols) const {
 	if(nbrows==0) nbrows = height;
 	if(nbcols==0) nbcols = width;
 

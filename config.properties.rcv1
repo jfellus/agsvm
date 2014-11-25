@@ -1,0 +1,13 @@
+dataset = /home/jfellus/Documents/These/prog/datasets/rcv1/rcv1_train.binary
+labels = /home/jfellus/Documents/These/prog/datasets/rcv1/rcv1_train.binary
+dataset_test = /home/jfellus/Documents/These/prog/datasets/rcv1/rcv1_train.binary
+labels_test = /home/jfellus/Documents/These/prog/datasets/rcv1/rcv1_train.binary
+n = 10000
+
+LAMBDA = 0
+
+SHUFFLE_DATASET = 0
+TRICK_LAMBDA_MUL = 0
+STAG_BUFFER_SIZE = 4
+ALGO = STAG
+LEARNING_RATE = 2

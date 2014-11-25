@@ -64,6 +64,8 @@ private:
 	key_t key;
 public:
 	float* data;
+	bool bDontDelete = false;
+
 
 public:
 	Matrix() {width=height=0; data=0; bOwner=bShared=false; _shmid=-1;}
@@ -103,7 +105,7 @@ public:
 	inline bool save(const char* file) const {return this->write(file);}
 	inline bool save(const string& file) const {return this->write(file.c_str());}
 
-	void dump(size_t nbrows=0, size_t nbcols=0);
+	void dump(size_t nbrows=0, size_t nbcols=0) const;
 
 	void clear();
 

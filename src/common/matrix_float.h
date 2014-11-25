@@ -14,11 +14,19 @@
 #include "../retin/toolbox/algebra/vector_float.h"
 #include "common/utils.h"
 
+class VectorSparse;
+
 class MatrixFloat : public shared_matrices::Matrix {
 public:
 
 	MatrixFloat():shared_matrices::Matrix(){}
 	MatrixFloat(size_t w, size_t h):shared_matrices::Matrix(w,h){this->clear();}
+	MatrixFloat(const MatrixFloat& m) {
+		data = m.data;
+		width = m.width;
+		height = m.height;
+		bDontDelete = true;
+	}
 
 	/////////////
 	// METHODS //
@@ -166,20 +174,30 @@ public:
 	// OPERATORS //
 	///////////////
 
+	void operator=(const MatrixFloat& m) { *((shared_matrices::Matrix*)this) = m;}
 	void operator=(const int* i) { *((shared_matrices::Matrix*)this) = i; }
 	float operator=(float x) { *((shared_matrices::Matrix*)this) = x; return x;}
 
 	void operator/=(float f) {vector_sdiv_float(data, f, width*height);}
 	void operator*=(float f) {vector_smul_float(data, f, width*height);}
+	void operator*=(float* m) {vector_mul_float(data, m, width*height);}
 
-	MatrixFloat& operator+=(MatrixFloat & m) { vector_add_float(data, m, width*height); return (*this); }
-	MatrixFloat& operator-=(MatrixFloat & m) {
-		if(m.height==1) {
-			for(int i=0; i<height; i++) vector_sub_float(get_row(i), m, width);
-		}
-		else vector_sub_float(data, m, width*height);
+	MatrixFloat& operator+=(float* m) { vector_add_float(data, m, width*height); return (*this); }
+	MatrixFloat& operator-=(float* m) {
+		vector_sub_float(data, m, width*height);
 		return (*this);
 	}
+
+
+	MatrixFloat operator+(float* v) {	MatrixFloat m(*this); m += v; return m;	}
+	MatrixFloat operator-(float* v) {	MatrixFloat m(*this); m -= v; return m;	}
+	MatrixFloat operator*(float* v) {	MatrixFloat m(*this); m *= v; return m;	}
+	MatrixFloat operator*(float v) {	MatrixFloat m(*this); m *= v; return m;	}
+
+	MatrixFloat& operator=(const VectorSparse& v);
+
+	MatrixFloat& operator+=(const VectorSparse& v);
+	MatrixFloat& operator-=(const VectorSparse& v);
 
 
 	/////////
@@ -189,7 +207,41 @@ public:
 	void dbg_range() { DBG(min() << " -> " << max()); }
 };
 
+inline MatrixFloat operator*(MatrixFloat& m, double f) {
+	MatrixFloat mm(m);
+	mm*=f;
+	return mm;
+}
 
+inline MatrixFloat operator*(float f, MatrixFloat& m) {
+	MatrixFloat mm(m);
+	mm*=f;
+	return mm;
+}
+
+inline MatrixFloat operator+(MatrixFloat& m, float* f) {
+	MatrixFloat mm(m);
+	mm+=f;
+	return mm;
+}
+
+inline MatrixFloat operator+(float* f, MatrixFloat& m) {
+	MatrixFloat mm(m);
+	mm+=f;
+	return mm;
+}
+
+inline MatrixFloat operator-(MatrixFloat& m, float* f) {
+	MatrixFloat mm(m);
+	mm-=f;
+	return mm;
+}
+
+inline MatrixFloat operator-(float* f, MatrixFloat& m) {
+	MatrixFloat mm(m);
+	mm-=f;
+	return mm;
+}
 
 
 #endif /* MATRIX_H_ */

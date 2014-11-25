@@ -219,3 +219,19 @@ void bin_reader::read (float*& data,size_t truncateDim) {
 
 
 
+//////////////////////////
+// libsvm format reader //
+//////////////////////////
+
+svm_reader::svm_reader(const char* filename) : matrix_reader<float>(filename){
+
+}
+
+svm_reader::~svm_reader() {
+
+}
+
+size_t svm_reader::get_height() {}
+size_t svm_reader::get_width() {}
+
+void svm_reader::read(float*& buffer, size_t truncateDim ) {}

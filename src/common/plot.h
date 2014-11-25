@@ -15,12 +15,12 @@
 
 using namespace std;
 
-inline void system(const string& s) {if(system(s.c_str())) throw "error";}
+inline void shell(const string& s) {if(system(s.c_str())) throw "error";}
 
 void plot_histogram(const Matrix& m, const string& file, float min=0, float max = 100) {
 	string ff = fmt("tmp%d.txt",get_thread_id());
 	m.save(ff);
-	system(fmt("python scripts/plot_histogram.py %s %s %f %f", ff.c_str(), file.c_str(), min, max));
+	shell(fmt("python scripts/plot_histogram.py %s %s %f %f", ff.c_str(), file.c_str(), min, max));
 	unlink(ff.c_str());
 }
 
@@ -39,7 +39,7 @@ void plot(const Matrix& m, const string& file, float min = 0, float max = 100) {
 void plot3d(const Matrix& m, const string& file, float min = 0, float max = 100) {
 	string ff = fmt("tmp%d.txt",get_thread_id());
 	m.save(ff);
-	system(fmt("python scripts/plot_histogram3d.py %s %s %f %f", ff.c_str(), file.c_str(), min, max));
+	shell(fmt("python scripts/plot_histogram3d.py %s %s %f %f", ff.c_str(), file.c_str(), min, max));
 	unlink(ff.c_str());
 }
 

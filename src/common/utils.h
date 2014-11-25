@@ -26,25 +26,25 @@ using namespace std;
 
 #define DBG_START(x) \
 	do {CRITICAL_BEGIN(); \
-	std::cout << x << " ... "; fflush(stdout); \
+	std::cout << x << " ... "; fflush(::stdout); \
 	CRITICAL_END();} while(0);
 
 #define DBG_END() \
 	do {CRITICAL_BEGIN(); \
-	std::cout << "ok\n"; fflush(stdout); \
+	std::cout << "ok\n"; fflush(::stdout); \
 	CRITICAL_END();} while(0);
 
 
 #define DBG(x) \
 	do {CRITICAL_BEGIN(); \
-	std::cout << x << "\n"; fflush(stdout); \
+	std::cout << x << "\n"; fflush(::stdout); \
 	CRITICAL_END();}while(0);
 
 void DBGVECTOR(float* x, int D);
 
 #define DBGV(x) \
 	CRITICAL_BEGIN(); \
-	std::cout << "" #x " : " << x << "\n"; fflush(stdout); \
+	std::cout << "" #x " : " << x << "\n"; fflush(::stdout); \
 	CRITICAL_END();
 
 #define DBGN(x) \
@@ -79,6 +79,9 @@ template <class T> T get_config(const char* what, T default_val) {
 	fclose(f);
 	return v;
 }
+
+
+#define ZZZZ(x) DBG(#x); x
 
 string get_config_str(const char* what, const char* default_val);
 

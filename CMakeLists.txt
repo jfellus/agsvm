@@ -41,16 +41,21 @@ add_library(retin_core ${core_sources} ${document_sources})
 add_library(retin_imcodec ${imcodec_sources})
 
 add_executable(gossip_svm src/main.cpp ${common_sources})
+add_executable(sparse_gossip_svm src/main_sparse.cpp ${common_sources} src/vector_sparse/VectorSparse.cpp  src/vector_sparse/MatrixSparse.cpp )
+
+
 
 set(retin_libs pthread retin_core retin_algebra retin_imcodec)
 
 target_link_libraries(gossip_svm ${retin_libs})
+target_link_libraries(sparse_gossip_svm ${retin_libs})
 
 
 find_package(PNG)
 if(PNG_FOUND)
 	include_directories(${PNG_INCLUDE_DIR})
 	target_link_libraries(gossip_svm ${PNG_LIBRARIES} )
+	target_link_libraries(sparse_gossip_svm ${PNG_LIBRARIES} )
 	add_definitions(-DRETIN_ENABLE_PNG)
 endif(PNG_FOUND)
 
@@ -58,6 +63,11 @@ find_package(JPEG)
 if(JPEG_FOUND)
 	include_directories(${JPEG_INCLUDE_DIR})
 	target_link_libraries(gossip_svm ${JPEG_LIBRARIES} )
+	target_link_libraries(sparse_gossip_svm ${JPEG_LIBRARIES} )
 	add_definitions(-DRETIN_ENABLE_JPEG)
 endif(JPEG_FOUND)
 
+
+
+add_executable(test_vector_sparse src/vector_sparse/test.cpp  src/vector_sparse/VectorSparse.cpp src/common/utils.cpp src/common/multithread.cpp)
+target_link_libraries(test_vector_sparse pthread)
