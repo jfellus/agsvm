@@ -10,7 +10,7 @@ add_definitions(-DTHREAD_POOL_USE_POSIX_THREADS)
 
 IF(CMAKE_COMPILER_IS_GNUCC)
 	SET(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}  -g -Wall -std=c99   -pedantic-errors -Wno-long-long -mfpmath=sse -msse")
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wno-sign-compare -std=c++0x -Wno-long-long -mfpmath=sse -msse")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wno-sign-compare -std=c++11 -Wno-long-long -mfpmath=sse -msse")
 ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/")
