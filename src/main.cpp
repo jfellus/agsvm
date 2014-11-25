@@ -497,12 +497,13 @@ int main(int argc, char **argv) {
 	t = 0;
 	compute_errors();
 	for(t=1; t<T_MAX; t++) {
-		DBGV(t);
 
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
-		if(t % 100 == 0)
+		if(t % 100 == 0) {
 			compute_errors();
+			DBGV(t);
+		}
 	}
 
 	//////////////////////
