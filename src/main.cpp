@@ -242,8 +242,10 @@ public:
 	}
 
 	int curi;
+	int curbufsize;
 	void STAG(float learningRate) {
 		if(!gradientsMemory) {
+			curbufsize=0;
 			curi = 0;
 			gradientsMemory.create(D, STAG_BUFFER_SIZE); gradientsMemory.clear();
 			averagedGradient.create(D, 1); averagedGradient.clear();
@@ -264,9 +266,10 @@ public:
 		for(int d=0; d<D; d++) averagedGradient[d] += gradientsMemory[curi*D+d];
 
 		curi = (curi+1)%STAG_BUFFER_SIZE;
+		if(curbufsize < STAG_BUFFER_SIZE) curbufsize++;
 
 		// Learn
-		for(int d=0; d<D; d++) w[d] -= learningRate / STAG_BUFFER_SIZE * averagedGradient[d];
+		for(int d=0; d<D; d++) w[d] -= learningRate / curbufsize * averagedGradient[d];
 	}
 
 	void DA(float learningRate) {
