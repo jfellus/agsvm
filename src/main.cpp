@@ -243,6 +243,7 @@ public:
 
 	int curi;
 	void STAG(float learningRate) {
+		DBG("STAG");
 		if(!gradientsMemory) {
 			curi = 0;
 			gradientsMemory.create(D, STAG_BUFFER_SIZE); gradientsMemory.clear();
@@ -252,7 +253,11 @@ public:
 		int i = draw_sample();
 		float* sample = X.get_row(i);
 
-		int lasti = (curi+STAG_BUFFER_SIZE-1)%STAG_BUFFER_SIZE;
+		int lasti = (curi+STAG_BUFFER_SIZE+1)%STAG_BUFFER_SIZE;
+		DBGV(curi);
+		DBGV(lasti);
+		DBGV(i);
+		sleep(1);
 
 		// Update averaged gradient
 		for(int d=0; d<D; d++) averagedGradient[d] -= gradientsMemory[lasti*D+d];
