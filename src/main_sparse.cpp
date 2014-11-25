@@ -88,7 +88,7 @@ int last_sender, last_receiver;
 
 class Node {
 public:
-	int id = 0;
+	int id;
 
 	MatrixSparse X;
 	Matrix y;
