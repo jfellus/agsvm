@@ -94,10 +94,15 @@ public:
 
 	float cost;
 
-	int iterations = 1;
+	int iterations ;
 
 
-	Node() {this->id = __node_last_id++; iterations = 1; }
+	Node() {
+		mul = 1;
+		curi = 0; shuffled_indices = 0;nbNeighbors = 0;neighbors = 0;isample = 0;
+		this->id = __node_last_id++; iterations = 1; b=cost=n=0;
+	}
+
 	void init(Matrix& X, Matrix& y, int first, int n) {
 		this->y.create_ref(&y[first], 1, n);
 		this->X.create_ref(&X[first*X.width],X.width,n);
@@ -178,7 +183,7 @@ public:
 		}
 	}
 
-	float mul = 1;
+	float mul;
 	void trick_lambda_mul(float* sample, int i) {
 		if( y[i] * vector_ps_float(w, sample, D) * mul < 1) {
 			for(int d=0; d<D; d++) w[d] = w[d]*mul - learningRate * (LAMBDA*w[d] - y[i]*sample[d]);
@@ -200,8 +205,8 @@ public:
 		//project_on_L2_ball();
 	}
 
-	int* shuffled_indices = 0;
-	int isample = 0;
+	int* shuffled_indices;
+	int isample;
 	int draw_sample() {
 		if(SHUFFLE_DATASET) {
 			int i=shuffled_indices[isample++];
@@ -243,7 +248,7 @@ public:
 		for(int d=0; d<D; d++) w[d] -= learningRate / n * averagedGradient[d];
 	}
 
-	int curi = 0;
+	int curi;
 	void STAG(float learningRate) {
 		if(!gradientsMemory) {
 			curi = 0;
