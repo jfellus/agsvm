@@ -8,3 +8,5 @@ CMakeCache.txt
 .project
 .*
 results/*
+gossip_svm
+sparse_gossip_svm
