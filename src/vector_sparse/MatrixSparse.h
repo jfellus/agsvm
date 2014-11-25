@@ -13,7 +13,7 @@
 
 class MatrixSparse {
 public:
-	VectorSparse* vectors = NULL;
+	VectorSparse* vectors;
 	size_t width,height;
 public:
 	MatrixSparse() { width = height = 0; vectors = NULL;}
