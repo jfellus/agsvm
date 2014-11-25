@@ -94,15 +94,19 @@ public:
 	Matrix y;
 	Matrix w;
 	Matrix w_avg;
-	float b = 0;
-	int n = 0;
+	float b;
+	int n;
 
-	float cost = 0;
+	float cost;
 
-	int iterations = 1;
+	int iterations;
 
 
-	Node() {this->id = __node_last_id++; iterations = 1;  }
+	Node() {
+		curi = 0; shuffled_indices = 0;nbNeighbors = 0;neighbors = 0;isample = 0;
+		this->id = __node_last_id++; iterations = 1; b=cost=n=0;
+	}
+
 	void init(MatrixSparse& X, Matrix& y, int first, int n) {
 		this->y.create_ref(&y[first], 1, n);
 		this->X.create_ref(X, first,n);
@@ -190,8 +194,8 @@ public:
 		SGD(LEARNING_RATE/(LAMBDA*iterations)); // Except learning rate, its a classical SGD (projection ?)
 	}
 
-	int* shuffled_indices = 0;
-	int isample = 0;
+	int* shuffled_indices;
+	int isample;
 	int draw_sample() {
 		if(SHUFFLE_DATASET) {
 			int i=shuffled_indices[isample++];
@@ -236,7 +240,7 @@ public:
 		w -= (learningRate / n) * averagedGradient;
 	}
 
-	int curi = 0;
+	int curi;
 	void STAG(float learningRate) {
 		if(!gradientsMemory) {
 			curi = 0;
@@ -332,8 +336,8 @@ public:
 	// CONNECTIVITY //
 	//////////////////
 
-	int* neighbors = 0;
-	int nbNeighbors = 0;
+	int* neighbors;
+	int nbNeighbors;
 
 	bool is_network_complete() {return neighbors==NULL;}
 	int get_neighbors_count() {return nbNeighbors;}
