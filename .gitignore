@@ -10,3 +10,4 @@ CMakeCache.txt
 results/*
 gossip_svm
 sparse_gossip_svm
+test_vector_sparse
