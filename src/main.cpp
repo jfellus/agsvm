@@ -239,10 +239,11 @@ public:
 			for(int d=0; d<D; d++) gradientsMemory[i*D + d] = LAMBDA * w[d];
 		}
 		vector_add_float(averagedGradient,gradientsMemory.get_row(i), D);
+		if(curbufsize < n) curbufsize++;
 
 		// Learn
 	//	for(int d=0; d<D; d++) w[d] *= (1 - learningRate * LAMBDA);
-		for(int d=0; d<D; d++) w[d] -= learningRate / n * averagedGradient[d];
+		for(int d=0; d<D; d++) w[d] -= learningRate / curbufsize * averagedGradient[d];
 	}
 
 	void SAG_exact_regul(float learningRate) {
