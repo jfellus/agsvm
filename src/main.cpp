@@ -444,7 +444,7 @@ void init() {
 
 	//	system("rm -rf data/*");
 	shell("rm -rf plots/*");
-	if(ALGO=="STAG") fE = newfilename(fmt("data/E_%s_%u_%f_%%u.txt", ALGO.c_str(), STAG_BUFFER_SIZE, LEARNING_RATE));
+	if(ALGO=="STAG" || ALGO=="STAGR") fE = newfilename(fmt("data/E_%s_%u_%f_%%u.txt", ALGO.c_str(), STAG_BUFFER_SIZE, LEARNING_RATE));
 	else fE = newfilename(fmt("data/E_%s_%f_%%u.txt", ALGO.c_str(), LEARNING_RATE));
 
 
