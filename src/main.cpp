@@ -37,7 +37,7 @@ int CATEGORY = get_config("CATEGORY", 1);
 
 float LAMBDA = get_config("LAMBDA", 0.1);
 
-int T_MAX = get_config("T_MAX", 100000000);
+int T_MAX = get_config("T_MAX", 100000000*N);
 bool ADD_BIAS = get_config("ADD_BIAS", true);
 int NB_NEIGHBORS = get_config("NB_NEIGHBORS", -1);
 int NB_EDGES = 0;
@@ -496,7 +496,7 @@ public:
 // DUMP //
 //////////
 
-string fE;
+string fE, fEstddev;
 
 void dump_classifier() {
 	FILE* f = fopen(fmt("data/classifier_%u.txt", t), "w");
@@ -505,11 +505,21 @@ void dump_classifier() {
 }
 
 void compute_errors() {
-	if(last_sender!=-1) node[last_sender].compute_estimate();
-	if(last_receiver!=-1) node[last_receiver].compute_estimate();
+	for(int i=0; i<N; i++) node[i].compute_estimate();
 
-	DBG("Error = " << node[last_sender].cost);
-	fappend(fE, fmt("%u %f\n", t, node[last_sender].cost));
+	double avgcost = 0;
+	double cost2 = 0;
+	for(int i=0; i<N; i++) {
+		avgcost += node[i].cost;
+		cost2 += node[i].cost * node[i].cost;
+	}
+
+	avgcost /= N;
+	cost2 /= N;
+
+
+	fappend(fE, fmt("%u %f\n", t, avgcost));
+	fappend(fEstddev, fmt("%u %f\n", t, sqrt(cost2 - avgcost*avgcost)));
 
 	//dump_classifier();
 }
@@ -532,7 +542,10 @@ void init() {
 
 	//	system("rm -rf data/*");
 	shell("rm -rf plots/*");
-	if(ALGO=="STAG" || ALGO=="STAGR") fE = newfilename(fmt("data/E_%s_%u_%f_%%u.txt", ALGO.c_str(), STAG_BUFFER_SIZE, LEARNING_RATE));
+	if(ALGO=="STAG" || ALGO=="STAGR") {
+		fE = newfilename(fmt("data/E_%s_%u_%f_%%u.txt", ALGO.c_str(), STAG_BUFFER_SIZE, LEARNING_RATE));
+		fEstddev = newfilename(fmt("data/DEV_%s_%u_%f_%%u.txt", ALGO.c_str(), STAG_BUFFER_SIZE, LEARNING_RATE));
+	}
 	else fE = newfilename(fmt("data/E_%s_%f_%%u.txt", ALGO.c_str(), LEARNING_RATE));
 
 
@@ -622,7 +635,7 @@ int main(int argc, char **argv) {
 
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
-		if(t % 100 == 0) {
+		if(t % (100*N) == 0) {
 			compute_errors();
 			DBGV(t);
 		}
