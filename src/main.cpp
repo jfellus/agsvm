@@ -102,6 +102,7 @@ public:
 
 
 	Node() {
+		curbufsize = 0;
 		mul = 1;
 		curi = 0; shuffled_indices = 0;nbNeighbors = 0;neighbors = 0;isample = 0;
 		this->id = __node_last_id++; iterations = 1; b=cost=n=0;
@@ -118,18 +119,22 @@ public:
 		this->n = n;
 		if(SHUFFLE_DATASET) {
 			shuffled_indices = new int[n];
-			for(int i=0; i<n; i++) { shuffled_indices[i] = i;}
-			for (int i = n - 1; i>=1; i--) {
-				int j = rand()%i;
-				int tmp = shuffled_indices[j];
-				shuffled_indices[j]  = shuffled_indices[i];
-				shuffled_indices[i]  = tmp;
-			}
+			shuffle_dataset();
 		}
 	}
 
 	~Node() {}
 
+	void shuffle_dataset() {
+		for(int i=0; i<n; i++) { shuffled_indices[i] = i;}
+		for (int i = n - 1; i>=1; i--) {
+			int j = rand()%i;
+			int tmp = shuffled_indices[j];
+			shuffled_indices[j]  = shuffled_indices[i];
+			shuffled_indices[i]  = tmp;
+		}
+		isample = 0;
+	}
 
 	void iteration() {
 		optimize();
@@ -207,7 +212,7 @@ public:
 	int draw_sample() {
 		if(SHUFFLE_DATASET) {
 			int i=shuffled_indices[isample++];
-			if(isample>=n) isample = 0;
+			if(isample>=n) shuffle_dataset();
 			return i;
 		}
 		return rand()%n;
