@@ -272,6 +272,36 @@ public:
 		for(int d=0; d<D; d++) w[d] -= learningRate / curbufsize * averagedGradient[d];
 	}
 
+	void STAG_exact_regul(float learningRate) {
+		if(!gradientsMemory) {
+			curbufsize=0;
+			curi = 0;
+			gradientsMemory.create(D, STAG_BUFFER_SIZE); gradientsMemory.clear();
+			averagedGradient.create(D, 1); averagedGradient.clear();
+		}
+
+		int i = draw_sample();
+		float* sample = X.get_row(i);
+
+		int lasti = (curi+STAG_BUFFER_SIZE+1)%STAG_BUFFER_SIZE;
+
+		// Update averaged gradient
+		for(int d=0; d<D; d++) averagedGradient[d] -= gradientsMemory[lasti*D+d];
+		if( hinge_loss(sample, y[i],w) > 0) {
+			for(int d=0; d<D; d++) gradientsMemory[curi*D + d] = - y[i]*sample[d];
+		} else {
+			for(int d=0; d<D; d++) gradientsMemory[curi*D + d] = 0;
+		}
+		for(int d=0; d<D; d++) averagedGradient[d] += gradientsMemory[curi*D+d];
+
+		curi = (curi+1)%STAG_BUFFER_SIZE;
+		if(curbufsize < STAG_BUFFER_SIZE) curbufsize++;
+
+		// Learn
+		for(int d=0; d<D; d++) w[d] -= learningRate * (LAMBDA*w[d] + averagedGradient[d]/curbufsize);
+	}
+
+
 	void DA(float learningRate) {
 		if(!averagedGradient) {averagedGradient.create(D, 1); averagedGradient.clear();}
 
@@ -297,7 +327,8 @@ public:
 	void optimize() {
 
 		// Choose algorithm here
-		if(ALGO=="STAG") STAG(LEARNING_RATE);
+		if(ALGO=="STAGR") STAG_exact_regul(LEARNING_RATE);
+		else if(ALGO=="STAG") STAG(LEARNING_RATE);
 		else if(ALGO=="SAG") SAG(LEARNING_RATE);
 		else if(ALGO=="DA") DA( LEARNING_RATE /(LAMBDA*iterations) );
 		else if(ALGO=="pegasos") pegasos();
