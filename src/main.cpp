@@ -273,7 +273,7 @@ public:
 
 		// Learn
 	//	for(int d=0; d<D; d++) w[d] *= (1 - learningRate * LAMBDA);
-		for(int d=0; d<D; d++) w[d] -= (1-learningRate*LAMBDA)*w[d] - learningRate/curbufsize*averagedGradient[d];
+		for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/curbufsize*averagedGradient[d];
 	}
 
 	int curi;
