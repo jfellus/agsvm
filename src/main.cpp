@@ -52,6 +52,10 @@ float LEARNING_RATE = get_config("LEARNING_RATE", 0.02);
 
 bool SHUFFLE_DATASET = get_config("SHUFFLE_DATASET", false);
 
+bool EXACT_REGUL = get_config("EXACT_REGUL", false);
+
+
+
 //////////
 // DATA //
 //////////
@@ -241,6 +245,37 @@ public:
 		for(int d=0; d<D; d++) w[d] -= learningRate / n * averagedGradient[d];
 	}
 
+	void SAG_exact_regul(float learningRate) {
+		if(!gradientsMemory) {
+			//gradientsMemory.create(n, 1); gradientsMemory.clear();
+			gradientsMemory.create(D, n); gradientsMemory.clear();
+			averagedGradient.create(D, 1); averagedGradient.clear();
+		}
+
+		int i = draw_sample();
+		float* sample = X.get_row(i);
+
+		// Update averaged gradient
+//		for(int d=0; d<D; d++) averagedGradient[d] -= gradientsMemory[i] * y[i] * sample[d];
+//		gradientsMemory[i] = (y[i]*vector_ps_float(w, sample, D)) < 1 ? -1 : 0;
+//		for(int d=0; d<D; d++) averagedGradient[d] += gradientsMemory[i] * y[i] * sample[d];
+
+		// Update averaged gradient
+		vector_sub_float(averagedGradient,gradientsMemory.get_row(i), D);
+		if( hinge_loss(sample, y[i],w) > 0) {
+			for(int d=0; d<D; d++) gradientsMemory[i*D + d] = - y[i]*sample[d];
+		} else {
+			for(int d=0; d<D; d++) gradientsMemory[i*D + d] = 0;
+		}
+		vector_add_float(averagedGradient,gradientsMemory.get_row(i), D);
+
+		if(curbufsize < n) curbufsize++;
+
+		// Learn
+	//	for(int d=0; d<D; d++) w[d] *= (1 - learningRate * LAMBDA);
+		for(int d=0; d<D; d++) w[d] -= (1-learningRate*LAMBDA)*w[d] - learningRate/curbufsize*averagedGradient[d];
+	}
+
 	int curi;
 	int curbufsize;
 	void STAG(float learningRate) {
@@ -298,7 +333,7 @@ public:
 		if(curbufsize < STAG_BUFFER_SIZE) curbufsize++;
 
 		// Learn
-		for(int d=0; d<D; d++) w[d] -= learningRate * (LAMBDA*w[d] + averagedGradient[d]/curbufsize);
+		for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/curbufsize*averagedGradient[d];
 	}
 
 
@@ -328,8 +363,14 @@ public:
 
 		// Choose algorithm here
 		if(ALGO=="STAGR") STAG_exact_regul(LEARNING_RATE);
-		else if(ALGO=="STAG") STAG(LEARNING_RATE);
-		else if(ALGO=="SAG") SAG(LEARNING_RATE);
+		else if(ALGO=="STAG") {
+			if(EXACT_REGUL) STAG_exact_regul(LEARNING_RATE);
+			else STAG(LEARNING_RATE);
+		}
+		else if(ALGO=="SAG") {
+			if(EXACT_REGUL) SAG_exact_regul(LEARNING_RATE);
+			else SAG(LEARNING_RATE);
+		}
 		else if(ALGO=="DA") DA( LEARNING_RATE /(LAMBDA*iterations) );
 		else if(ALGO=="pegasos") pegasos();
 		else if(ALGO=="SGD") SGD(LEARNING_RATE);
