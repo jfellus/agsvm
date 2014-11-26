@@ -363,8 +363,7 @@ public:
 	void optimize() {
 
 		// Choose algorithm here
-		if(ALGO=="STAGR") STAG_exact_regul(LEARNING_RATE);
-		else if(ALGO=="STAG") {
+		if(ALGO=="STAG") {
 			if(EXACT_REGUL) STAG_exact_regul(LEARNING_RATE);
 			else STAG(LEARNING_RATE);
 		}
