@@ -97,6 +97,7 @@ public:
 	int n;
 
 	float cost;
+	float weight;
 
 	int iterations ;
 
@@ -106,6 +107,7 @@ public:
 		mul = 1;
 		curi = 0; shuffled_indices = 0;nbNeighbors = 0;neighbors = 0;isample = 0;
 		this->id = __node_last_id++; iterations = 1; b=cost=n=0;
+		weight = 0;
 	}
 
 	void init(Matrix& X, Matrix& y, int first, int n) {
@@ -137,11 +139,11 @@ public:
 	}
 
 	void iteration() {
-		optimize();
-
-		// Send
-		last_receiver = gossip_choose_receiver();
-		send(node[last_receiver]);
+		if(N==1) {
+			optimize();
+		} else {
+			STAG_gossip(LEARNING_RATE);
+		}
 	}
 
 
@@ -343,6 +345,41 @@ public:
 	}
 
 
+	void STAG_gossip(float learningRate) {
+		if(!gradientsMemory) {
+			curbufsize=0;
+			curi = 0;
+			gradientsMemory.create(D, STAG_BUFFER_SIZE); gradientsMemory.clear();
+			averagedGradient.create(D, 1); averagedGradient.clear();
+		}
+
+		int i = draw_sample();
+		float* sample = X.get_row(i);
+
+		int lasti = (curi+STAG_BUFFER_SIZE+1)%STAG_BUFFER_SIZE;
+
+		// Update averaged gradient
+		for(int d=0; d<D; d++) averagedGradient[d] -= gradientsMemory[lasti*D+d];
+		if( hinge_loss(sample, y[i],w) > 0) {
+			for(int d=0; d<D; d++) gradientsMemory[curi*D + d] = - y[i]*sample[d];
+		} else {
+			for(int d=0; d<D; d++) gradientsMemory[curi*D + d] = 0;
+		}
+		for(int d=0; d<D; d++) averagedGradient[d] += gradientsMemory[curi*D+d];
+
+		curi = (curi+1)%STAG_BUFFER_SIZE;
+		if(curbufsize < STAG_BUFFER_SIZE) {
+			curbufsize++;
+			weight++;
+		}
+
+		last_receiver = gossip_choose_receiver();
+		send(node[last_receiver]);
+
+		// Learn
+		for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/weight*averagedGradient[d];
+	}
+
 	void DA(float learningRate) {
 		if(!averagedGradient) {averagedGradient.create(D, 1); averagedGradient.clear();}
 
@@ -383,7 +420,7 @@ public:
 		iterations++;
 
 		// Compute average w (for Dual Averaging etc...)
-		for(int d = 0; d < D; d ++) w_avg[d] = w_avg[d] * (iterations-1.0)/iterations + 1.0/iterations * w[d];
+		//for(int d = 0; d < D; d ++) w_avg[d] = w_avg[d] * (iterations-1.0)/iterations + 1.0/iterations * w[d];
 	}
 
 
@@ -395,17 +432,22 @@ public:
 	}
 
 	int send(Node& node) {
-		node.receive(0);
+		weight *= 0.5;
+		for(int d=0; d<D; d++) averagedGradient[d] *= 0.5;
+
+		node.receive(id);
 		return 0;
 	}
 
-	void receive(int arg) {
-		// TODO
+	void receive(int sender) {
+		weight += node[sender].weight;
+		for(int d=0; d<D; d++) averagedGradient[d] += node[sender].averagedGradient[d];
 	}
 
 
 	void compute_estimate() {
-		this->cost = ALGO=="DA" ? compute_cost_avg_w() : compute_cost();
+		this->cost = //ALGO=="DA" ? compute_cost_avg_w() :
+				compute_cost();
 	}
 
 
