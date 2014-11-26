@@ -54,6 +54,7 @@ bool SHUFFLE_DATASET = get_config("SHUFFLE_DATASET", false);
 
 bool EXACT_REGUL = get_config("EXACT_REGUL", false);
 
+int NB_MESSAGES = get_config("NB_MESSAGES", 10);
 
 
 //////////
@@ -70,6 +71,7 @@ float learningRate = 1;
 
 
 int t = 0;
+int nbgradients_evaluated = 0;
 
 //////////////////////
 
@@ -97,12 +99,13 @@ public:
 	int n;
 
 	float cost;
-	float weight;
+	double weight;
 
 	int iterations ;
 
 
 	Node() {
+		nbmessages_sent = 0;
 		curbufsize = 0;
 		mul = 1;
 		curi = 0; shuffled_indices = 0;nbNeighbors = 0;neighbors = 0;isample = 0;
@@ -138,11 +141,20 @@ public:
 		isample = 0;
 	}
 
+	int nbmessages_sent;
 	void iteration() {
 		if(N==1) {
 			optimize();
 		} else {
-			STAG_gossip(LEARNING_RATE);
+			if(nbmessages_sent>=NB_MESSAGES) {
+				STAG_gossip(LEARNING_RATE);
+				nbgradients_evaluated++;
+				nbmessages_sent = 0;
+			} else {
+				last_receiver = gossip_choose_receiver();
+				send(node[last_receiver]);
+				nbmessages_sent++;
+			}
 		}
 	}
 
@@ -346,12 +358,8 @@ public:
 
 
 	void STAG_gossip(float learningRate) {
-		if(!gradientsMemory) {
-			curbufsize=0;
-			curi = 0;
-			gradientsMemory.create(D, STAG_BUFFER_SIZE); gradientsMemory.clear();
-			averagedGradient.create(D, 1); averagedGradient.clear();
-		}
+		// Learn
+		if(weight>0.00001) for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/weight*averagedGradient[d];
 
 		int i = draw_sample();
 		float* sample = X.get_row(i);
@@ -372,12 +380,6 @@ public:
 			curbufsize++;
 			weight++;
 		}
-
-		last_receiver = gossip_choose_receiver();
-		send(node[last_receiver]);
-
-		// Learn
-		for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/weight*averagedGradient[d];
 	}
 
 	void DA(float learningRate) {
@@ -429,12 +431,15 @@ public:
 	////////////
 
 	void init_gossip() {
+		curbufsize=0;
+		curi = 0;
+		gradientsMemory.create(D, STAG_BUFFER_SIZE); gradientsMemory.clear();
+		averagedGradient.create(D, 1); averagedGradient.clear();
 	}
 
 	int send(Node& node) {
 		weight *= 0.5;
 		for(int d=0; d<D; d++) averagedGradient[d] *= 0.5;
-
 		node.receive(id);
 		return 0;
 	}
@@ -507,20 +512,22 @@ void dump_classifier() {
 void compute_errors() {
 	for(int i=0; i<N; i++) node[i].compute_estimate();
 
-	double avgcost = 0;
-	double cost2 = 0;
-	for(int i=0; i<N; i++) {
-		avgcost += node[i].cost;
-		cost2 += node[i].cost * node[i].cost;
+	if(N==1) {
+		fappend(fE, fmt("%u %f\n", t, node[0].cost));
+	} else {
+		double avgcost = 0;
+		double cost2 = 0;
+		for(int i=0; i<N; i++) {
+			avgcost += node[i].cost;
+			cost2 += node[i].cost * node[i].cost;
+		}
+
+		avgcost /= N;
+		cost2 /= N;
+
+		fappend(fE, fmt("%u %f\n", nbgradients_evaluated, avgcost));
+		fappend(fEstddev, fmt("%u %f\n", nbgradients_evaluated, sqrt(cost2 - avgcost*avgcost)));
 	}
-
-	avgcost /= N;
-	cost2 /= N;
-
-
-	fappend(fE, fmt("%u %f\n", t, avgcost));
-	fappend(fEstddev, fmt("%u %f\n", t, sqrt(cost2 - avgcost*avgcost)));
-
 	//dump_classifier();
 }
 
@@ -590,7 +597,6 @@ void init() {
 	n = X.height;
 	D = X.width;
 
-	node = new Node[N];
 	create_network();
 
 	int ndo = 0;
@@ -627,17 +633,16 @@ int main(int argc, char **argv) {
 
 	////////////////////////
 
-	for(int i=0; i<N; i++) node[i].init_gossip();
+	if(N!=1) {for(int i=0; i<N; i++) node[i].init_gossip();}
 
 	t = 0;
 	compute_errors();
 	for(t=1; t<T_MAX; t++) {
-
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
-		if(t % (100*N) == 0) {
+		if(t % (100*N*NB_MESSAGES) == 0) {
 			compute_errors();
-			DBGV(t);
+			DBGV(nbgradients_evaluated);
 		}
 	}
 
