@@ -55,6 +55,7 @@ bool SHUFFLE_DATASET = get_config("SHUFFLE_DATASET", false);
 bool EXACT_REGUL = get_config("EXACT_REGUL", false);
 
 int NB_MESSAGES = get_config("NB_MESSAGES", 10);
+int ACCURACY = get_config("ACCURACY", 10);
 
 
 //////////
@@ -658,7 +659,7 @@ int main(int argc, char **argv) {
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
 		int NN = N; if(NN>50) NN = 50;
-		if(t % (100*NB_MESSAGES*NN) == 0) {
+		if(t % (ACCURACY*NB_MESSAGES*NN) == 0) {
 			compute_errors();
 			DBG("t=" << (N==1 ? t : nbgradients_evaluated));
 			foverwrite("t.txt", fmt("%u\n", N==1 ? t : nbgradients_evaluated));
