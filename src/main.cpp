@@ -619,7 +619,7 @@ void init() {
 
 
 int main(int argc, char **argv) {
-//	srand(time(0));
+	srand(time(0));
 
 	try {
 	DBG_START("Init ");
