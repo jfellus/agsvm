@@ -514,7 +514,7 @@ void compute_errors() {
 
 	if(N==1) {
 		fappend(fE, fmt("%u %f\n", t, node[0].cost));
-		putenv((char*)fmt("_E_=%u", node[0].cost));
+		setenv("GSVM_E_", node[0].cost);
 	} else {
 		double avgcost = 0;
 		double cost2 = 0;
