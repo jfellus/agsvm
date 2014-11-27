@@ -514,6 +514,7 @@ void compute_errors() {
 
 	if(N==1) {
 		fappend(fE, fmt("%u %f\n", t, node[0].cost));
+		putenv((char*)fmt("_E_=%u", node[0].cost));
 	} else {
 		double avgcost = 0;
 		double cost2 = 0;
@@ -527,6 +528,7 @@ void compute_errors() {
 
 		fappend(fE, fmt("%u %f\n", nbgradients_evaluated, avgcost));
 		fappend(fEstddev, fmt("%u %f\n", nbgradients_evaluated, sqrt(cost2 - avgcost*avgcost)));
+		putenv((char*)fmt("_E_=%u", avgcost));
 	}
 	//dump_classifier();
 }
@@ -641,6 +643,11 @@ int main(int argc, char **argv) {
 	////////////////////////
 
 	if(N!=1) {for(int i=0; i<N; i++) node[i].init_gossip();}
+
+	putenv((char*)fmt("_N_=%u", N));
+	putenv((char*)fmt("_STAG_BUFFER_SIZE_=%u", STAG_BUFFER_SIZE));
+	putenv((char*)fmt("_LEARNING_RATE_=%u", LEARNING_RATE));
+
 
 	t = 0;
 	compute_errors();
