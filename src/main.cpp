@@ -37,7 +37,7 @@ int CATEGORY = get_config("CATEGORY", 1);
 
 float LAMBDA = get_config("LAMBDA", 0.1);
 
-int T_MAX = get_config("T_MAX", 1000000*N);
+int T_MAX = get_config("T_MAX", 100000*N);
 bool ADD_BIAS = get_config("ADD_BIAS", true);
 int NB_NEIGHBORS = get_config("NB_NEIGHBORS", -1);
 int NB_EDGES = 0;
@@ -57,6 +57,8 @@ bool EXACT_REGUL = get_config("EXACT_REGUL", false);
 int NB_MESSAGES = get_config("NB_MESSAGES", 10);
 int ACCURACY = get_config("ACCURACY", 10);
 
+int E_START = get_config("E_START", 2000);
+int E_END = get_config("E_END", T_MAX);
 
 //////////
 // DATA //
@@ -656,11 +658,14 @@ int main(int argc, char **argv) {
 
 	t = 0;
 	compute_errors();
-	for(t=1; t/N<T_MAX; t++) {
+	for(t=1; t/(N==1 ? 1 : NB_MESSAGES*N)<T_MAX; t++) {
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
 		int NN = N; if(NN>50) NN=50;
-		if(t % (ACCURACY*NB_MESSAGES*NN) == 0) {
+		if(t % (ACCURACY*NB_MESSAGES*NN) == 0 &&
+				(N==1 ? (t>=E_START && t<=E_END) : (nbgradients_evaluated>=E_START && nbgradients_evaluated<=E_END))
+
+		) {
 			compute_errors();
 			DBG("t=" << (N==1 ? t : nbgradients_evaluated));
 			foverwrite("t.txt", fmt("%u\n", N==1 ? t : nbgradients_evaluated));
