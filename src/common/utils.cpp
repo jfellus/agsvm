@@ -59,10 +59,11 @@ void DBGVECTOR(float* x, int D) {
 	printf(" ]\n");
 }
 
+inline void shell(const string& s) {if(system(s.c_str())) throw "error";}
 
 void setenv(const char* name, int val) {
-	setenv("GSVM_T_", fmt("%u", val), 1);
+	shell(fmt("export %s=%u", name, val));
 }
 void setenv(const char* name, double val) {
-	setenv("GSVM_T_", fmt("%f", val), 1);
+	shell(fmt("export %s=%f", name, val));
 }
