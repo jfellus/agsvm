@@ -59,17 +59,17 @@ void DBGVECTOR(float* x, int D) {
 	printf(" ]\n");
 }
 
-inline void shell(const string& s) {if(system(s.c_str())) throw "error";}
+inline void shell(const string& s, bool berrors = true) {if(system(s.c_str()) && berrors) throw "error";}
 
 void setenv(const char* name, int val) {
-	shell(fmt("touch /tmp/%u.pidinfo", getpid()));
-	shell(fmt("grep -v '^%s=' /tmp/%u.pidinfo > /tmp/%u.pidinfo.bak", name, getpid(), getpid()));
-	shell(fmt("cp -f /tmp/%u.pidinfo.bak > /tmp/%u.pidinfo", getpid(), getpid()));
-	shell(fmt("echo '%s=%u' >> /tmp/%u.pidinfo", name, val, getpid(), getpid()));
+	shell(fmt("touch /tmp/%u.pidinfo", getpid()), false);
+	shell(fmt("grep -v '^%s=' /tmp/%u.pidinfo > /tmp/%u.pidinfo.bak", name, getpid(), getpid()), false);
+	shell(fmt("cp -f /tmp/%u.pidinfo.bak /tmp/%u.pidinfo", getpid(), getpid()), false);
+	shell(fmt("echo '%s=%u' >> /tmp/%u.pidinfo", name, val, getpid()), false);
 }
 void setenv(const char* name, double val) {
-	shell(fmt("touch /tmp/%u.pidinfo", getpid()));
-	shell(fmt("grep -v '^%s=' /tmp/%u.pidinfo > /tmp/%u.pidinfo.bak", name, getpid(), getpid()));
-	shell(fmt("cp -f /tmp/%u.pidinfo.bak > /tmp/%u.pidinfo", getpid(), getpid()));
-	shell(fmt("echo '%s=%f' >> /tmp/%u.pidinfo", name, val, getpid(), getpid()));
+	shell(fmt("touch /tmp/%u.pidinfo", getpid()), false);
+	shell(fmt("grep -v '^%s=' /tmp/%u.pidinfo > /tmp/%u.pidinfo.bak", name, getpid(), getpid()), false);
+	shell(fmt("cp -f /tmp/%u.pidinfo.bak /tmp/%u.pidinfo", getpid(), getpid()), false);
+	shell(fmt("echo '%s=%f' >> /tmp/%u.pidinfo", name, val, getpid()), false);
 }
