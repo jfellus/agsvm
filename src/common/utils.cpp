@@ -63,13 +63,13 @@ inline void shell(const string& s) {if(system(s.c_str())) throw "error";}
 
 void setenv(const char* name, int val) {
 	shell(fmt("touch /tmp/%u.pidinfo", getpid()));
-	shell(fmt("grep -v '^%s=' /tmp/%u.pidinfo > /tmp/%u.pidinfo.bak", getpid(), getpid()));
-	shell(fmt("cp /tmp/%u.pidinfo.bak > /tmp/%u.pidinfo", getpid(), getpid()));
+	shell(fmt("grep -v '^%s=' /tmp/%u.pidinfo > /tmp/%u.pidinfo.bak", name, getpid(), getpid()));
+	shell(fmt("cp -f /tmp/%u.pidinfo.bak > /tmp/%u.pidinfo", getpid(), getpid()));
 	shell(fmt("echo '%s=%u' >> /tmp/%u.pidinfo", name, val, getpid(), getpid()));
 }
 void setenv(const char* name, double val) {
 	shell(fmt("touch /tmp/%u.pidinfo", getpid()));
-	shell(fmt("grep -v '^%s=' /tmp/%u.pidinfo > /tmp/%u.pidinfo.bak", getpid(), getpid()));
-	shell(fmt("cp /tmp/%u.pidinfo.bak > /tmp/%u.pidinfo", getpid(), getpid()));
+	shell(fmt("grep -v '^%s=' /tmp/%u.pidinfo > /tmp/%u.pidinfo.bak", name, getpid(), getpid()));
+	shell(fmt("cp -f /tmp/%u.pidinfo.bak > /tmp/%u.pidinfo", getpid(), getpid()));
 	shell(fmt("echo '%s=%f' >> /tmp/%u.pidinfo", name, val, getpid(), getpid()));
 }
