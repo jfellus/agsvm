@@ -518,6 +518,7 @@ void compute_errors() {
 	} else {
 		double avgcost = 0;
 		double cost2 = 0;
+		int N = ::N > 50 ? 50 : ::N;
 		for(int i=0; i<N; i++) {
 			avgcost += node[i].cost;
 			cost2 += node[i].cost * node[i].cost;
@@ -656,7 +657,8 @@ int main(int argc, char **argv) {
 	for(t=1; t<T_MAX; t++) {
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
-		if(t % (100*NB_MESSAGES) == 0) {
+		int NN = N; if(NN>50) NN = 50;
+		if(t % (100*NB_MESSAGES*NN) == 0) {
 			compute_errors();
 			DBG("t=" << (N==1 ? t : nbgradients_evaluated));
 			foverwrite("t.txt", fmt("%u\n", N==1 ? t : nbgradients_evaluated));
