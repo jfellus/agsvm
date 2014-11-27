@@ -59,6 +59,7 @@ string stringprintf(const char* fmt, ...);
 #define fmt(x...) stringprintf(x).c_str()
 
 void fappend(const string& filename, const string& line);
+void foverwrite(const string& filename, const string& line);
 
 #define FATAL(x) do { DBG(x); exit(1); } while(0);
 

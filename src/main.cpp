@@ -649,7 +649,8 @@ int main(int argc, char **argv) {
 		node[last_sender].iteration();
 		if(t % (100*NB_MESSAGES) == 0) {
 			compute_errors();
-			DBGV(nbgradients_evaluated);
+			DBG("t=" << (N==1 ? t : nbgradients_evaluated));
+			foverwrite("t.txt", fmt("%u\n", N==1 ? t : nbgradients_evaluated));
 		}
 	}
 
