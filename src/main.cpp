@@ -528,7 +528,7 @@ void compute_errors() {
 
 		fappend(fE, fmt("%u %f\n", nbgradients_evaluated, avgcost));
 		fappend(fEstddev, fmt("%u %f\n", nbgradients_evaluated, sqrt(cost2 - avgcost*avgcost)));
-		putenv((char*)fmt("_E_=%u", avgcost));
+		putenv((char*)fmt("GSVM_E_=%u", avgcost));
 	}
 	//dump_classifier();
 }
@@ -644,9 +644,9 @@ int main(int argc, char **argv) {
 
 	if(N!=1) {for(int i=0; i<N; i++) node[i].init_gossip();}
 
-	putenv((char*)fmt("_N_=%u", N));
-	putenv((char*)fmt("_STAG_BUFFER_SIZE_=%u", STAG_BUFFER_SIZE));
-	putenv((char*)fmt("_LEARNING_RATE_=%u", LEARNING_RATE));
+	putenv((char*)fmt("GSVM_N_=%u", N));
+	putenv((char*)fmt("GSVM_STAG_BUFFER_SIZE_=%u", STAG_BUFFER_SIZE));
+	putenv((char*)fmt("GSVM_LEARNING_RATE_=%u", LEARNING_RATE));
 
 
 	t = 0;
@@ -658,7 +658,7 @@ int main(int argc, char **argv) {
 			compute_errors();
 			DBG("t=" << (N==1 ? t : nbgradients_evaluated));
 			foverwrite("t.txt", fmt("%u\n", N==1 ? t : nbgradients_evaluated));
-			putenv((char*)fmt("_T_=%u", (N==1 ? t : nbgradients_evaluated)));
+			putenv((char*)fmt("GSVM_T_=%u", (N==1 ? t : nbgradients_evaluated)));
 		}
 	}
 
