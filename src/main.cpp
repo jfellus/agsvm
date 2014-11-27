@@ -645,7 +645,7 @@ int main(int argc, char **argv) {
 	for(t=1; t<T_MAX; t++) {
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
-		if(t % (100*N*NB_MESSAGES) == 0) {
+		if(t % (100*NB_MESSAGES) == 0) {
 			compute_errors();
 			DBGV(nbgradients_evaluated);
 		}
