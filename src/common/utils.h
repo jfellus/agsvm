@@ -87,4 +87,9 @@ template <class T> T get_config(const char* what, T default_val) {
 string get_config_str(const char* what, const char* default_val);
 
 
+void setenv(const char* name, int val);
+void setenv(const char* name, double val);
+
+
+
 #endif /* UTILS_H_ */

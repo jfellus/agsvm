@@ -58,3 +58,11 @@ void DBGVECTOR(float* x, int D) {
 	for(int i=0; i<D; i++) printf(" %f", x[i]);
 	printf(" ]\n");
 }
+
+
+void setenv(const char* name, int val) {
+	setenv("GSVM_T_", fmt("%u", val), 1);
+}
+void setenv(const char* name, double val) {
+	setenv("GSVM_T_", fmt("%f", val), 1);
+}
