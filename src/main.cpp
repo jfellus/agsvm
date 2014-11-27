@@ -656,7 +656,7 @@ int main(int argc, char **argv) {
 
 	t = 0;
 	compute_errors();
-	for(t=1; t<T_MAX; t++) {
+	for(t=1; t/N<T_MAX; t++) {
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
 		int NN = N;
