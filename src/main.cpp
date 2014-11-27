@@ -659,7 +659,7 @@ int main(int argc, char **argv) {
 	for(t=1; t/N<T_MAX; t++) {
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
-		int NN = N;
+		int NN = N; if(NN>50) NN=50;
 		if(t % (ACCURACY*NB_MESSAGES*NN) == 0) {
 			compute_errors();
 			DBG("t=" << (N==1 ? t : nbgradients_evaluated));
