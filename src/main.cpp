@@ -651,6 +651,7 @@ int main(int argc, char **argv) {
 			compute_errors();
 			DBG("t=" << (N==1 ? t : nbgradients_evaluated));
 			foverwrite("t.txt", fmt("%u\n", N==1 ? t : nbgradients_evaluated));
+			putenv((char*)fmt("_T_=%u", (N==1 ? t : nbgradients_evaluated)));
 		}
 	}
 
