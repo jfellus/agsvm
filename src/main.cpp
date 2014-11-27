@@ -554,8 +554,10 @@ void init() {
 		fE = newfilename(fmt("data/E_%s_%u_%f_%%u.txt", ALGO.c_str(), STAG_BUFFER_SIZE, LEARNING_RATE));
 		fEstddev = newfilename(fmt("data/DEV_%s_%u_%f_%%u.txt", ALGO.c_str(), STAG_BUFFER_SIZE, LEARNING_RATE));
 		} else {
-			fE = newfilename(fmt("data/E_%s_N%u_%u_%f_%%u.txt", ALGO.c_str(), N, STAG_BUFFER_SIZE, LEARNING_RATE));
-			fEstddev = newfilename(fmt("data/DEV_%s_N%u_%u_%f_%%u.txt", ALGO.c_str(), N, STAG_BUFFER_SIZE, LEARNING_RATE));
+			shell(fmt("mkdir -p data/N%u", N));
+			shell(fmt("mkdir -p data/N%u/stddev", N));
+			fE = newfilename(fmt("data/N%u/E_%s_N%u_%u_%f_%%u.txt", N, ALGO.c_str(), N, STAG_BUFFER_SIZE, LEARNING_RATE));
+			fEstddev = newfilename(fmt("data/N%u/stddev/DEV_%s_N%u_%u_%f_%%u.txt", N, ALGO.c_str(), N, STAG_BUFFER_SIZE, LEARNING_RATE));
 		}
 	}
 	else fE = newfilename(fmt("data/E_%s_%f_%%u.txt", ALGO.c_str(), LEARNING_RATE));
