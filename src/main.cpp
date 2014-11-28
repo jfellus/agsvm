@@ -659,13 +659,12 @@ int main(int argc, char **argv) {
 
 	t = 0;
 	compute_errors();
-	for(t=1; t/(N==1 ? 1 : N/NB_MESSAGES)<T_MAX; t++) {
+	for(t=1; t/(N==1 ? 1 : N*NB_MESSAGES)<T_MAX; t++) {
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
 		int NN = N; if(NN>50) NN=50;
 		if(t % (ACCURACY*NB_MESSAGES*NN) == 0 &&
-				(N==1 ? (t>=E_START && t<=E_END) : (nbgradients_evaluated>=E_START && nbgradients_evaluated<=E_END))
-
+				(N==1 ? (t>=E_START) : true)
 		) {
 			compute_errors();
 			DBG("t=" << (N==1 ? t : nbgradients_evaluated));
