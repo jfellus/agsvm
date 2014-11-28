@@ -60,6 +60,7 @@ int ACCURACY = get_config("ACCURACY", 10);
 int E_START = get_config("E_START", 2000);
 int E_END = get_config("E_END", T_MAX);
 
+
 //////////
 // DATA //
 //////////
@@ -658,7 +659,7 @@ int main(int argc, char **argv) {
 
 	t = 0;
 	compute_errors();
-	for(t=1; t/(N==1 ? 1 : NB_MESSAGES*N)<T_MAX; t++) {
+	for(t=1; t/(N==1 ? 1 : N/NB_MESSAGES)<T_MAX; t++) {
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
 		int NN = N; if(NN>50) NN=50;
