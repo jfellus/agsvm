@@ -58,7 +58,7 @@ int NB_MESSAGES = get_config("NB_MESSAGES", 10);
 int ACCURACY = get_config("ACCURACY", 10);
 
 int E_START = get_config("E_START", 2000);
-int E_END = get_config("E_END", T_MAX);
+int E_END = get_config("E_END", T_MAX*NB_MESSAGES*N);
 
 
 //////////
