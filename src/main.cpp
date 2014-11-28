@@ -54,7 +54,7 @@ bool SHUFFLE_DATASET = get_config("SHUFFLE_DATASET", false);
 
 bool EXACT_REGUL = get_config("EXACT_REGUL", false);
 
-int NB_MESSAGES = get_config("NB_MESSAGES", 10);
+int NB_MESSAGES = get_config("MESSAGES", 10);
 int ACCURACY = get_config("ACCURACY", 10);
 
 int E_START = get_config("E_START", 2000);
