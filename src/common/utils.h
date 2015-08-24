@@ -18,7 +18,8 @@
 #include <string.h>
 #include <string>
 #include <libgen.h>
-
+#include <sstream>
+#include <fstream>
 
 
 #define MAX(a,b) (((a) > (b)) ? (a) : (b))
@@ -40,6 +41,9 @@ using namespace std;
 	std::cout << x << "\n"; fflush(::stdout); \
 	CRITICAL_END();}while(0);
 
+#define TOSTRING(x) ((ostringstream&)(ostringstream().flush() << x)).str()
+
+
 void DBGVECTOR(float* x, int D);
 
 #define DBGV(x) \
@@ -57,6 +61,8 @@ void DBGVECTOR(float* x, int D);
 
 string stringprintf(const char* fmt, ...);
 #define fmt(x...) stringprintf(x).c_str()
+
+#define FAPPEND(filename, x) do { std::ofstream f(filename, std::ios_base::app); f << x << "\n";  f.close();} while(0)
 
 void fappend(const string& filename, const string& line);
 void foverwrite(const string& filename, const string& line);

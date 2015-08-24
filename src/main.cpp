@@ -37,7 +37,7 @@ int CATEGORY = get_config("CATEGORY", 1);
 
 float LAMBDA = get_config("LAMBDA", 0.1);
 
-int T_MAX = get_config("T_MAX", 100000*N);
+int T_MAX = get_config("T_MAX", 2000000*N);
 bool ADD_BIAS = get_config("ADD_BIAS", true);
 int NB_NEIGHBORS = get_config("NB_NEIGHBORS", -1);
 int NB_EDGES = 0;
@@ -54,12 +54,14 @@ bool SHUFFLE_DATASET = get_config("SHUFFLE_DATASET", false);
 
 bool EXACT_REGUL = get_config("EXACT_REGUL", false);
 
-int NB_MESSAGES = get_config("MESSAGES", 10);
-int ACCURACY = get_config("ACCURACY", 10);
+float NB_MESSAGES = get_config("MESSAGES", 10.0);
+int ACCURACY = get_config("ACCURACY", 100);
 
-int E_START = get_config("E_START", 2000);
+int E_START = get_config("E_START", 1);
 int E_END = get_config("E_END", T_MAX*NB_MESSAGES*N);
 
+
+string PREFIX = get_config_str("PREFIX", "");
 
 //////////
 // DATA //
@@ -150,14 +152,26 @@ public:
 		if(N==1) {
 			optimize();
 		} else {
-			if(nbmessages_sent>=NB_MESSAGES) {
-				STAG_gossip(LEARNING_RATE);
-				nbgradients_evaluated++;
-				nbmessages_sent = 0;
+			if(NB_MESSAGES<1) {
+				if(nbmessages_sent>=1/NB_MESSAGES) {
+					last_receiver = gossip_choose_receiver();
+					send(node[last_receiver]);
+					nbmessages_sent=0;
+				} else {
+					optimize_gossip();
+					nbgradients_evaluated++;
+					nbmessages_sent++;
+				}
 			} else {
-				last_receiver = gossip_choose_receiver();
-				send(node[last_receiver]);
-				nbmessages_sent++;
+				if(nbmessages_sent>=NB_MESSAGES) {
+					optimize_gossip();
+					nbgradients_evaluated++;
+					nbmessages_sent = 0;
+				} else {
+					last_receiver = gossip_choose_receiver();
+					send(node[last_receiver]);
+					nbmessages_sent++;
+				}
 			}
 		}
 	}
@@ -300,6 +314,35 @@ public:
 		for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/curbufsize*averagedGradient[d];
 	}
 
+
+	void SAG_gossip_exact_regul(float learningRate) {
+		if(!gradientsMemory) {
+			//gradientsMemory.create(n, 1); gradientsMemory.clear();
+			gradientsMemory.create(D, n); gradientsMemory.clear();
+			weight = 0;
+		}
+
+		if(weight>0.00001) for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/weight*averagedGradient[d];
+
+		int i = draw_sample();
+		float* sample = X.get_row(i);
+
+		// Update averaged gradient
+		vector_sub_float(averagedGradient,gradientsMemory.get_row(i), D);
+		if( hinge_loss(sample, y[i],w) > 0) {
+			for(int d=0; d<D; d++) gradientsMemory[i*D + d] = - y[i]*sample[d];
+		} else {
+			for(int d=0; d<D; d++) gradientsMemory[i*D + d] = 0;
+		}
+		vector_add_float(averagedGradient,gradientsMemory.get_row(i), D);
+
+		if(curbufsize < n) { curbufsize++; weight++; }
+	}
+
+	void SAG_gossip(float learningRate) {
+		SAG_gossip_exact_regul(learningRate);
+	}
+
 	int curi;
 	int curbufsize;
 	void STAG(float learningRate) {
@@ -328,14 +371,16 @@ public:
 		if(curbufsize < STAG_BUFFER_SIZE) curbufsize++;
 
 		// Learn
-		for(int d=0; d<D; d++) w[d] -= learningRate / curbufsize * averagedGradient[d];
+		for(int d=0; d<D; d++) w[d] -= averagedGradient[d] * learningRate / curbufsize;
 	}
 
+	Matrix indicesMemory;
 	void STAG_exact_regul(float learningRate) {
-		if(!gradientsMemory) {
+		if(!indicesMemory) {
 			curbufsize=0;
 			curi = 0;
-			gradientsMemory.create(D, STAG_BUFFER_SIZE); gradientsMemory.clear();
+			indicesMemory.create(1, STAG_BUFFER_SIZE); indicesMemory.clear();
+			for(uint i = 0; i<STAG_BUFFER_SIZE; i++) indicesMemory[i] = -1;
 			averagedGradient.create(D, 1); averagedGradient.clear();
 		}
 
@@ -345,23 +390,29 @@ public:
 		int lasti = (curi+STAG_BUFFER_SIZE+1)%STAG_BUFFER_SIZE;
 
 		// Update averaged gradient
-		for(int d=0; d<D; d++) averagedGradient[d] -= gradientsMemory[lasti*D+d];
+		if(indicesMemory[lasti]>=0) for(int d=0; d<D; d++) averagedGradient[d] += y[indicesMemory[lasti]]*X.get_row(indicesMemory[lasti])[d];
 		if( hinge_loss(sample, y[i],w) > 0) {
-			for(int d=0; d<D; d++) gradientsMemory[curi*D + d] = - y[i]*sample[d];
+			indicesMemory[curi] = i;
+			for(int d=0; d<D; d++) averagedGradient[d] -= y[i]*X.get_row(i)[d];
 		} else {
-			for(int d=0; d<D; d++) gradientsMemory[curi*D + d] = 0;
+			indicesMemory[curi] = -1;
 		}
-		for(int d=0; d<D; d++) averagedGradient[d] += gradientsMemory[curi*D+d];
 
 		curi = (curi+1)%STAG_BUFFER_SIZE;
 		if(curbufsize < STAG_BUFFER_SIZE) curbufsize++;
 
 		// Learn
-		for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/curbufsize*averagedGradient[d];
+		for(int d=0; d<D; d++) w[d] -= learningRate*(LAMBDA*w[d] + averagedGradient[d]/curbufsize);
 	}
 
 
 	void STAG_gossip(float learningRate) {
+		if(!gradientsMemory) {
+			curbufsize=0;
+			curi = 0;
+			gradientsMemory.create(D, STAG_BUFFER_SIZE); gradientsMemory.clear();
+		}
+
 		// Learn
 		if(weight>0.00001) for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/weight*averagedGradient[d];
 
@@ -429,16 +480,21 @@ public:
 		//for(int d = 0; d < D; d ++) w_avg[d] = w_avg[d] * (iterations-1.0)/iterations + 1.0/iterations * w[d];
 	}
 
+	void optimize_gossip() {
+		if(ALGO=="STAG") {
+			STAG_gossip(LEARNING_RATE);
+		} else {
+			SAG_gossip(LEARNING_RATE);
+		}
+	}
 
 	////////////
 	// GOSSIP //
 	////////////
 
 	void init_gossip() {
-		curbufsize=0;
-		curi = 0;
-		gradientsMemory.create(D, STAG_BUFFER_SIZE); gradientsMemory.clear();
 		averagedGradient.create(D, 1); averagedGradient.clear();
+		weight = 0;
 	}
 
 	int send(Node& node) {
@@ -506,6 +562,7 @@ public:
 //////////
 
 string fE, fEstddev;
+std::ofstream ffE, ffEstddev;
 
 void dump_classifier() {
 	FILE* f = fopen(fmt("data/classifier_%u.txt", t), "w");
@@ -522,7 +579,7 @@ void compute_errors() {
 	} else {
 		double avgcost = 0;
 		double cost2 = 0;
-		int N = ::N > 50 ? 50 : ::N;
+		int N = ::N > 1 ? 1 : ::N;
 		for(int i=0; i<N; i++) node[i].compute_estimate();
 		for(int i=0; i<N; i++) {
 			avgcost += node[i].cost;
@@ -532,9 +589,11 @@ void compute_errors() {
 		avgcost /= N;
 		cost2 /= N;
 
-		fappend(fE, fmt("%u %f\n", nbgradients_evaluated, avgcost));
-		fappend(fEstddev, fmt("%u %f\n", nbgradients_evaluated, sqrt(cost2 - avgcost*avgcost)));
-		setenv("GSVM_E_", avgcost);
+		ffE << ((float)nbgradients_evaluated/::N) << " " << avgcost << "\n";
+	//	ffEstddev << ((float)nbgradients_evaluated/::N) << " " << sqrt(cost2 - avgcost*avgcost) << "\n";
+		ffE.flush();
+	//	ffEstddev.flush();
+	//	setenv("GSVM_E_", avgcost);
 	}
 	//dump_classifier();
 }
@@ -561,7 +620,7 @@ void init() {
 	shell("rm -rf plots/*");
 	if(ALGO=="STAG" || ALGO=="STAGR") {
 		if(N==1) {
-		fE = newfilename(fmt("data/E_%s_%u_%f_%%u.txt", ALGO.c_str(), STAG_BUFFER_SIZE, LEARNING_RATE));
+		fE = newfilename(fmt("data/E_%s_N%u_%u_%f_%%u.txt", ALGO.c_str(),N, STAG_BUFFER_SIZE, LEARNING_RATE));
 		fEstddev = newfilename(fmt("data/DEV_%s_%u_%f_%%u.txt", ALGO.c_str(), STAG_BUFFER_SIZE, LEARNING_RATE));
 		} else {
 			shell(fmt("mkdir -p data/N%u", N));
@@ -570,7 +629,12 @@ void init() {
 			fEstddev = newfilename(fmt("data/N%u/stddev/DEV_%s_N%u_%u_%f_%%u.txt", N, ALGO.c_str(), N, STAG_BUFFER_SIZE, LEARNING_RATE));
 		}
 	}
-	else fE = newfilename(fmt("data/E_%s_%f_%%u.txt", ALGO.c_str(), LEARNING_RATE));
+	else {
+		fE = newfilename(fmt("data/E_%s_N%u_%f_M%f_%%u.txt", ALGO.c_str(), N, LEARNING_RATE, NB_MESSAGES));
+//		fEstddev = newfilename(fmt("data/DEV_%s_N%u_%f_%%u.txt", ALGO.c_str(), N, LEARNING_RATE));
+		ffE.open(fE, ios_base::app);
+//		ffEstddev.open(fEstddev, ios_base::app);
+	}
 
 
 	if(str_has_extension(dataset.c_str(), "jpg")) {
@@ -631,15 +695,17 @@ void init() {
 
 
 int main(int argc, char **argv) {
-	srand(time(0));
+	srand(clock());
 
 	try {
 	DBG_START("Init ");
 	if(argc<=1) {
 		init();
 	} else {
-		DBG("with : " << argv[1]);
-		dataset = argv[1];
+//		DBG("with : " << argv[1]);
+//		dataset = argv[1];
+//		LEARNING_RATE = atof(argv[1]);
+		PREFIX = argv[1];
 		init();
 		//chdir(dirname(argv[1]));
 	}
@@ -651,10 +717,10 @@ int main(int argc, char **argv) {
 	////////////////////////
 
 	if(N!=1) {for(int i=0; i<N; i++) node[i].init_gossip();}
-
-	setenv("GSVM_N_", N);
-	setenv("GSVM_STAG_BUFFER_SIZE_", STAG_BUFFER_SIZE);
-	setenv("GSVM_LEARNING_RATE_", LEARNING_RATE);
+//
+//	setenv("GSVM_N_", N);
+//	setenv("GSVM_STAG_BUFFER_SIZE_", STAG_BUFFER_SIZE);
+//	setenv("GSVM_LEARNING_RATE_", LEARNING_RATE);
 
 
 	t = 0;
@@ -663,13 +729,10 @@ int main(int argc, char **argv) {
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
 		int NN = N; if(NN>50) NN=50;
-		if(t % (ACCURACY*NB_MESSAGES*NN) == 0 &&
-				(N==1 ? (t>=E_START) : true)
-		) {
+		if(t%N==0) {
 			compute_errors();
-			DBG("t=" << (N==1 ? t : nbgradients_evaluated));
-			foverwrite("t.txt", fmt("%u\n", N==1 ? t : nbgradients_evaluated));
-			setenv("GSVM_T_", (N==1 ? t : nbgradients_evaluated));
+			DBG("t=" << (N==1 ? t : nbgradients_evaluated/N));
+		//	setenv("GSVM_T_", (N==1 ? t : nbgradients_evaluated));
 		}
 	}
 

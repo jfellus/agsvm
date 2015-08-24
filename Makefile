@@ -38,22 +38,19 @@ RM = /usr/bin/cmake -E remove -f
 # Escaping for special characters.
 EQUALS = =
 
-# The program to use to edit the cache.
-CMAKE_EDIT_COMMAND = /usr/bin/ccmake
-
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /users/jerofell/agsvm
+CMAKE_SOURCE_DIR = /home/jfellus/Documents/These/prog/agsvm
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /users/jerofell/agsvm
+CMAKE_BINARY_DIR = /home/jfellus/Documents/These/prog/agsvm
 
 #=============================================================================
 # Targets provided globally by CMake.
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running interactive CMake command-line interface..."
+	/usr/bin/cmake -i .
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -72,9 +69,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /users/jerofell/agsvm/CMakeFiles /users/jerofell/agsvm/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfellus/Documents/These/prog/agsvm/CMakeFiles /home/jfellus/Documents/These/prog/agsvm/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /users/jerofell/agsvm/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfellus/Documents/These/prog/agsvm/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -102,17 +99,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named gossip_svm
+# Target rules for targets named agsvm
 
 # Build rule for target.
-gossip_svm: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 gossip_svm
-.PHONY : gossip_svm
+agsvm: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 agsvm
+.PHONY : agsvm
 
 # fast build rule for target.
-gossip_svm/fast:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/build
-.PHONY : gossip_svm/fast
+agsvm/fast:
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/build
+.PHONY : agsvm/fast
 
 #=============================================================================
 # Target rules for targets named retin_algebra
@@ -154,17 +151,17 @@ retin_imcodec/fast:
 .PHONY : retin_imcodec/fast
 
 #=============================================================================
-# Target rules for targets named sparse_gossip_svm
+# Target rules for targets named sparse_agsvm
 
 # Build rule for target.
-sparse_gossip_svm: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 sparse_gossip_svm
-.PHONY : sparse_gossip_svm
+sparse_agsvm: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sparse_agsvm
+.PHONY : sparse_agsvm
 
 # fast build rule for target.
-sparse_gossip_svm/fast:
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/build
-.PHONY : sparse_gossip_svm/fast
+sparse_agsvm/fast:
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/build
+.PHONY : sparse_agsvm/fast
 
 #=============================================================================
 # Target rules for targets named test_vector_sparse
@@ -184,8 +181,8 @@ src/common/math.o: src/common/math.cpp.o
 
 # target to build an object file
 src/common/math.cpp.o:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/math.cpp.o
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/common/math.cpp.o
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/math.cpp.o
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/math.cpp.o
 .PHONY : src/common/math.cpp.o
 
 src/common/math.i: src/common/math.cpp.i
@@ -193,8 +190,8 @@ src/common/math.i: src/common/math.cpp.i
 
 # target to preprocess a source file
 src/common/math.cpp.i:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/math.cpp.i
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/common/math.cpp.i
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/math.cpp.i
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/math.cpp.i
 .PHONY : src/common/math.cpp.i
 
 src/common/math.s: src/common/math.cpp.s
@@ -202,8 +199,8 @@ src/common/math.s: src/common/math.cpp.s
 
 # target to generate assembly for a file
 src/common/math.cpp.s:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/math.cpp.s
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/common/math.cpp.s
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/math.cpp.s
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/math.cpp.s
 .PHONY : src/common/math.cpp.s
 
 src/common/matrix_double.o: src/common/matrix_double.cpp.o
@@ -211,8 +208,8 @@ src/common/matrix_double.o: src/common/matrix_double.cpp.o
 
 # target to build an object file
 src/common/matrix_double.cpp.o:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/matrix_double.cpp.o
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/common/matrix_double.cpp.o
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/matrix_double.cpp.o
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/matrix_double.cpp.o
 .PHONY : src/common/matrix_double.cpp.o
 
 src/common/matrix_double.i: src/common/matrix_double.cpp.i
@@ -220,8 +217,8 @@ src/common/matrix_double.i: src/common/matrix_double.cpp.i
 
 # target to preprocess a source file
 src/common/matrix_double.cpp.i:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/matrix_double.cpp.i
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/common/matrix_double.cpp.i
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/matrix_double.cpp.i
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/matrix_double.cpp.i
 .PHONY : src/common/matrix_double.cpp.i
 
 src/common/matrix_double.s: src/common/matrix_double.cpp.s
@@ -229,8 +226,8 @@ src/common/matrix_double.s: src/common/matrix_double.cpp.s
 
 # target to generate assembly for a file
 src/common/matrix_double.cpp.s:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/matrix_double.cpp.s
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/common/matrix_double.cpp.s
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/matrix_double.cpp.s
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/matrix_double.cpp.s
 .PHONY : src/common/matrix_double.cpp.s
 
 src/common/matrix_float.o: src/common/matrix_float.cpp.o
@@ -238,8 +235,8 @@ src/common/matrix_float.o: src/common/matrix_float.cpp.o
 
 # target to build an object file
 src/common/matrix_float.cpp.o:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/matrix_float.cpp.o
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/common/matrix_float.cpp.o
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/matrix_float.cpp.o
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/matrix_float.cpp.o
 .PHONY : src/common/matrix_float.cpp.o
 
 src/common/matrix_float.i: src/common/matrix_float.cpp.i
@@ -247,8 +244,8 @@ src/common/matrix_float.i: src/common/matrix_float.cpp.i
 
 # target to preprocess a source file
 src/common/matrix_float.cpp.i:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/matrix_float.cpp.i
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/common/matrix_float.cpp.i
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/matrix_float.cpp.i
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/matrix_float.cpp.i
 .PHONY : src/common/matrix_float.cpp.i
 
 src/common/matrix_float.s: src/common/matrix_float.cpp.s
@@ -256,8 +253,8 @@ src/common/matrix_float.s: src/common/matrix_float.cpp.s
 
 # target to generate assembly for a file
 src/common/matrix_float.cpp.s:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/matrix_float.cpp.s
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/common/matrix_float.cpp.s
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/matrix_float.cpp.s
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/matrix_float.cpp.s
 .PHONY : src/common/matrix_float.cpp.s
 
 src/common/multithread.o: src/common/multithread.cpp.o
@@ -265,8 +262,8 @@ src/common/multithread.o: src/common/multithread.cpp.o
 
 # target to build an object file
 src/common/multithread.cpp.o:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/multithread.cpp.o
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/common/multithread.cpp.o
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/multithread.cpp.o
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/multithread.cpp.o
 	$(MAKE) -f CMakeFiles/test_vector_sparse.dir/build.make CMakeFiles/test_vector_sparse.dir/src/common/multithread.cpp.o
 .PHONY : src/common/multithread.cpp.o
 
@@ -275,8 +272,8 @@ src/common/multithread.i: src/common/multithread.cpp.i
 
 # target to preprocess a source file
 src/common/multithread.cpp.i:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/multithread.cpp.i
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/common/multithread.cpp.i
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/multithread.cpp.i
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/multithread.cpp.i
 	$(MAKE) -f CMakeFiles/test_vector_sparse.dir/build.make CMakeFiles/test_vector_sparse.dir/src/common/multithread.cpp.i
 .PHONY : src/common/multithread.cpp.i
 
@@ -285,8 +282,8 @@ src/common/multithread.s: src/common/multithread.cpp.s
 
 # target to generate assembly for a file
 src/common/multithread.cpp.s:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/multithread.cpp.s
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/common/multithread.cpp.s
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/multithread.cpp.s
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/multithread.cpp.s
 	$(MAKE) -f CMakeFiles/test_vector_sparse.dir/build.make CMakeFiles/test_vector_sparse.dir/src/common/multithread.cpp.s
 .PHONY : src/common/multithread.cpp.s
 
@@ -295,8 +292,8 @@ src/common/utils.o: src/common/utils.cpp.o
 
 # target to build an object file
 src/common/utils.cpp.o:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/utils.cpp.o
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/common/utils.cpp.o
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/utils.cpp.o
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/utils.cpp.o
 	$(MAKE) -f CMakeFiles/test_vector_sparse.dir/build.make CMakeFiles/test_vector_sparse.dir/src/common/utils.cpp.o
 .PHONY : src/common/utils.cpp.o
 
@@ -305,8 +302,8 @@ src/common/utils.i: src/common/utils.cpp.i
 
 # target to preprocess a source file
 src/common/utils.cpp.i:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/utils.cpp.i
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/common/utils.cpp.i
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/utils.cpp.i
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/utils.cpp.i
 	$(MAKE) -f CMakeFiles/test_vector_sparse.dir/build.make CMakeFiles/test_vector_sparse.dir/src/common/utils.cpp.i
 .PHONY : src/common/utils.cpp.i
 
@@ -315,8 +312,8 @@ src/common/utils.s: src/common/utils.cpp.s
 
 # target to generate assembly for a file
 src/common/utils.cpp.s:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/common/utils.cpp.s
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/common/utils.cpp.s
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/utils.cpp.s
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/utils.cpp.s
 	$(MAKE) -f CMakeFiles/test_vector_sparse.dir/build.make CMakeFiles/test_vector_sparse.dir/src/common/utils.cpp.s
 .PHONY : src/common/utils.cpp.s
 
@@ -325,7 +322,7 @@ src/main.o: src/main.cpp.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/main.cpp.o
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -333,7 +330,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/main.cpp.i
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -341,7 +338,7 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) -f CMakeFiles/gossip_svm.dir/build.make CMakeFiles/gossip_svm.dir/src/main.cpp.s
+	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
 src/main_sparse.o: src/main_sparse.cpp.o
@@ -349,7 +346,7 @@ src/main_sparse.o: src/main_sparse.cpp.o
 
 # target to build an object file
 src/main_sparse.cpp.o:
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/main_sparse.cpp.o
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/main_sparse.cpp.o
 .PHONY : src/main_sparse.cpp.o
 
 src/main_sparse.i: src/main_sparse.cpp.i
@@ -357,7 +354,7 @@ src/main_sparse.i: src/main_sparse.cpp.i
 
 # target to preprocess a source file
 src/main_sparse.cpp.i:
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/main_sparse.cpp.i
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/main_sparse.cpp.i
 .PHONY : src/main_sparse.cpp.i
 
 src/main_sparse.s: src/main_sparse.cpp.s
@@ -365,7 +362,7 @@ src/main_sparse.s: src/main_sparse.cpp.s
 
 # target to generate assembly for a file
 src/main_sparse.cpp.s:
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/main_sparse.cpp.s
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/main_sparse.cpp.s
 .PHONY : src/main_sparse.cpp.s
 
 src/retin/toolbox/algebra/core.o: src/retin/toolbox/algebra/core.c.o
@@ -757,7 +754,7 @@ src/vector_sparse/MatrixSparse.o: src/vector_sparse/MatrixSparse.cpp.o
 
 # target to build an object file
 src/vector_sparse/MatrixSparse.cpp.o:
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/vector_sparse/MatrixSparse.cpp.o
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/vector_sparse/MatrixSparse.cpp.o
 .PHONY : src/vector_sparse/MatrixSparse.cpp.o
 
 src/vector_sparse/MatrixSparse.i: src/vector_sparse/MatrixSparse.cpp.i
@@ -765,7 +762,7 @@ src/vector_sparse/MatrixSparse.i: src/vector_sparse/MatrixSparse.cpp.i
 
 # target to preprocess a source file
 src/vector_sparse/MatrixSparse.cpp.i:
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/vector_sparse/MatrixSparse.cpp.i
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/vector_sparse/MatrixSparse.cpp.i
 .PHONY : src/vector_sparse/MatrixSparse.cpp.i
 
 src/vector_sparse/MatrixSparse.s: src/vector_sparse/MatrixSparse.cpp.s
@@ -773,7 +770,7 @@ src/vector_sparse/MatrixSparse.s: src/vector_sparse/MatrixSparse.cpp.s
 
 # target to generate assembly for a file
 src/vector_sparse/MatrixSparse.cpp.s:
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/vector_sparse/MatrixSparse.cpp.s
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/vector_sparse/MatrixSparse.cpp.s
 .PHONY : src/vector_sparse/MatrixSparse.cpp.s
 
 src/vector_sparse/VectorSparse.o: src/vector_sparse/VectorSparse.cpp.o
@@ -781,7 +778,7 @@ src/vector_sparse/VectorSparse.o: src/vector_sparse/VectorSparse.cpp.o
 
 # target to build an object file
 src/vector_sparse/VectorSparse.cpp.o:
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/vector_sparse/VectorSparse.cpp.o
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/vector_sparse/VectorSparse.cpp.o
 	$(MAKE) -f CMakeFiles/test_vector_sparse.dir/build.make CMakeFiles/test_vector_sparse.dir/src/vector_sparse/VectorSparse.cpp.o
 .PHONY : src/vector_sparse/VectorSparse.cpp.o
 
@@ -790,7 +787,7 @@ src/vector_sparse/VectorSparse.i: src/vector_sparse/VectorSparse.cpp.i
 
 # target to preprocess a source file
 src/vector_sparse/VectorSparse.cpp.i:
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/vector_sparse/VectorSparse.cpp.i
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/vector_sparse/VectorSparse.cpp.i
 	$(MAKE) -f CMakeFiles/test_vector_sparse.dir/build.make CMakeFiles/test_vector_sparse.dir/src/vector_sparse/VectorSparse.cpp.i
 .PHONY : src/vector_sparse/VectorSparse.cpp.i
 
@@ -799,7 +796,7 @@ src/vector_sparse/VectorSparse.s: src/vector_sparse/VectorSparse.cpp.s
 
 # target to generate assembly for a file
 src/vector_sparse/VectorSparse.cpp.s:
-	$(MAKE) -f CMakeFiles/sparse_gossip_svm.dir/build.make CMakeFiles/sparse_gossip_svm.dir/src/vector_sparse/VectorSparse.cpp.s
+	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/vector_sparse/VectorSparse.cpp.s
 	$(MAKE) -f CMakeFiles/test_vector_sparse.dir/build.make CMakeFiles/test_vector_sparse.dir/src/vector_sparse/VectorSparse.cpp.s
 .PHONY : src/vector_sparse/VectorSparse.cpp.s
 
@@ -833,13 +830,13 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... agsvm"
 	@echo "... edit_cache"
-	@echo "... gossip_svm"
 	@echo "... rebuild_cache"
 	@echo "... retin_algebra"
 	@echo "... retin_core"
 	@echo "... retin_imcodec"
-	@echo "... sparse_gossip_svm"
+	@echo "... sparse_agsvm"
 	@echo "... test_vector_sparse"
 	@echo "... src/common/math.o"
 	@echo "... src/common/math.i"

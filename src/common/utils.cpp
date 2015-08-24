@@ -11,10 +11,12 @@
 #include <string.h>
 
 string stringprintf(const char* fmt, ...) {
-	char* s = new char[strlen(fmt)+512];
 	va_list vl;
 	va_start(vl, fmt);
-	vsprintf(s, fmt, vl);
+	size_t n = strlen(fmt)+1024;
+
+	char* s = new char[n];
+	vsnprintf(s, n, fmt, vl);
 	va_end(vl);
 	string ss(s);
 	delete s;
@@ -23,6 +25,7 @@ string stringprintf(const char* fmt, ...) {
 
 void fappend(const string& filename, const string& line) {
 	FILE* f = fopen(filename.c_str(), "a");
+	if(!f) DBG("OUILLE : " << filename);
 		fputs(line.c_str(), f);
 	fclose(f);
 }
