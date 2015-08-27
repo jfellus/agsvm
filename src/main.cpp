@@ -691,6 +691,8 @@ void init() {
 	DBGV(N);
 	DBGV(D);
 	DBGV(n);
+	DBGV(X_test.width);
+	DBGV(X_test.height);
 	sleep(1);
 }
 
