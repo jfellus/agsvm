@@ -585,7 +585,7 @@ std::ofstream ffE, ffEstddev;
 
 void dump_classifier() {
 	static int i=0;
-	node[0].w.write(TOSTRING("data/w/" << ALGO << "_N" << N << "_l" << LEARNING_RATE << "_" << i++ << ".txt").c_str());
+	node[0].w.write(TOSTRING("data/w/" << ALGO << "/N" << N << "/l" << LEARNING_RATE << "/" << i++ << ".fvec").c_str());
 }
 
 void compute_errors() {
