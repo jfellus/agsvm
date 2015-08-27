@@ -37,7 +37,7 @@ int CATEGORY = get_config("CATEGORY", 1);
 
 float LAMBDA = get_config("LAMBDA", 0.1);
 
-int T_MAX = get_config("T_MAX", 2000000*N);
+int T_MAX = get_config("T_MAX", 20000000*N);
 bool ADD_BIAS = get_config("ADD_BIAS", true);
 int NB_NEIGHBORS = get_config("NB_NEIGHBORS", -1);
 int NB_EDGES = 0;
@@ -589,7 +589,7 @@ void compute_errors() {
 		avgcost /= N;
 		cost2 /= N;
 
-		ffE << ((float)nbgradients_evaluated/::N) << " " << avgcost << "\n";
+		ffE << (t) << " " << avgcost << "\n";
 	//	ffEstddev << ((float)nbgradients_evaluated/::N) << " " << sqrt(cost2 - avgcost*avgcost) << "\n";
 		ffE.flush();
 	//	ffEstddev.flush();
@@ -662,7 +662,8 @@ void init() {
 
 		if(ADD_BIAS) {
 			Matrix X_test_nobias;
-			X_test_nobias.load(dataset.c_str());
+			X_test_nobias.load(dataset_test.c_str());
+			X_test.create(X_test_nobias.width+1,X_test_nobias.height);
 			for(int i=0; i<X_test.height; i++) {
 				memcpy(X_test.get_row(i),X_test_nobias.get_row(i),X_test_nobias.width*sizeof(float));
 				X_test[i*X_test.width + X_test_nobias.width] = 1;
@@ -670,9 +671,9 @@ void init() {
 		}
 		else X_test.load(dataset_test.c_str());
 		y_test.load(labels_test.c_str());
-		if(CATEGORY != -1) {
-			for(int i=0; i<y.height; i++) y[i] = y[i]==CATEGORY ? 1 : -1;
-		}
+//		if(CATEGORY != -1) {
+//			for(int i=0; i<y.height; i++) y[i] = y[i]==CATEGORY ? 1 : -1;
+//		}
 	}
 //	if(LIMIT_NDATA!=-1 && X.height > LIMIT_NDATA) X.height = LIMIT_NDATA;
 	n = X.height;
@@ -729,7 +730,7 @@ int main(int argc, char **argv) {
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
 		int NN = N; if(NN>50) NN=50;
-		if(t%N==0) {
+		if(t%3000==0) {
 			compute_errors();
 			DBG("t=" << (N==1 ? t : nbgradients_evaluated/N));
 		//	setenv("GSVM_T_", (N==1 ? t : nbgradients_evaluated));
