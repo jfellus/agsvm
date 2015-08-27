@@ -164,6 +164,19 @@ sparse_agsvm/fast:
 .PHONY : sparse_agsvm/fast
 
 #=============================================================================
+# Target rules for targets named test_classifier
+
+# Build rule for target.
+test_classifier: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_classifier
+.PHONY : test_classifier
+
+# fast build rule for target.
+test_classifier/fast:
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/build
+.PHONY : test_classifier/fast
+
+#=============================================================================
 # Target rules for targets named test_vector_sparse
 
 # Build rule for target.
@@ -183,6 +196,7 @@ src/common/math.o: src/common/math.cpp.o
 src/common/math.cpp.o:
 	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/math.cpp.o
 	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/math.cpp.o
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/common/math.cpp.o
 .PHONY : src/common/math.cpp.o
 
 src/common/math.i: src/common/math.cpp.i
@@ -192,6 +206,7 @@ src/common/math.i: src/common/math.cpp.i
 src/common/math.cpp.i:
 	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/math.cpp.i
 	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/math.cpp.i
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/common/math.cpp.i
 .PHONY : src/common/math.cpp.i
 
 src/common/math.s: src/common/math.cpp.s
@@ -201,6 +216,7 @@ src/common/math.s: src/common/math.cpp.s
 src/common/math.cpp.s:
 	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/math.cpp.s
 	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/math.cpp.s
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/common/math.cpp.s
 .PHONY : src/common/math.cpp.s
 
 src/common/matrix_double.o: src/common/matrix_double.cpp.o
@@ -210,6 +226,7 @@ src/common/matrix_double.o: src/common/matrix_double.cpp.o
 src/common/matrix_double.cpp.o:
 	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/matrix_double.cpp.o
 	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/matrix_double.cpp.o
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/common/matrix_double.cpp.o
 .PHONY : src/common/matrix_double.cpp.o
 
 src/common/matrix_double.i: src/common/matrix_double.cpp.i
@@ -219,6 +236,7 @@ src/common/matrix_double.i: src/common/matrix_double.cpp.i
 src/common/matrix_double.cpp.i:
 	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/matrix_double.cpp.i
 	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/matrix_double.cpp.i
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/common/matrix_double.cpp.i
 .PHONY : src/common/matrix_double.cpp.i
 
 src/common/matrix_double.s: src/common/matrix_double.cpp.s
@@ -228,6 +246,7 @@ src/common/matrix_double.s: src/common/matrix_double.cpp.s
 src/common/matrix_double.cpp.s:
 	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/matrix_double.cpp.s
 	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/matrix_double.cpp.s
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/common/matrix_double.cpp.s
 .PHONY : src/common/matrix_double.cpp.s
 
 src/common/matrix_float.o: src/common/matrix_float.cpp.o
@@ -237,6 +256,7 @@ src/common/matrix_float.o: src/common/matrix_float.cpp.o
 src/common/matrix_float.cpp.o:
 	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/matrix_float.cpp.o
 	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/matrix_float.cpp.o
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/common/matrix_float.cpp.o
 .PHONY : src/common/matrix_float.cpp.o
 
 src/common/matrix_float.i: src/common/matrix_float.cpp.i
@@ -246,6 +266,7 @@ src/common/matrix_float.i: src/common/matrix_float.cpp.i
 src/common/matrix_float.cpp.i:
 	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/matrix_float.cpp.i
 	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/matrix_float.cpp.i
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/common/matrix_float.cpp.i
 .PHONY : src/common/matrix_float.cpp.i
 
 src/common/matrix_float.s: src/common/matrix_float.cpp.s
@@ -255,6 +276,7 @@ src/common/matrix_float.s: src/common/matrix_float.cpp.s
 src/common/matrix_float.cpp.s:
 	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/matrix_float.cpp.s
 	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/matrix_float.cpp.s
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/common/matrix_float.cpp.s
 .PHONY : src/common/matrix_float.cpp.s
 
 src/common/multithread.o: src/common/multithread.cpp.o
@@ -264,6 +286,7 @@ src/common/multithread.o: src/common/multithread.cpp.o
 src/common/multithread.cpp.o:
 	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/multithread.cpp.o
 	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/multithread.cpp.o
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/common/multithread.cpp.o
 	$(MAKE) -f CMakeFiles/test_vector_sparse.dir/build.make CMakeFiles/test_vector_sparse.dir/src/common/multithread.cpp.o
 .PHONY : src/common/multithread.cpp.o
 
@@ -274,6 +297,7 @@ src/common/multithread.i: src/common/multithread.cpp.i
 src/common/multithread.cpp.i:
 	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/multithread.cpp.i
 	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/multithread.cpp.i
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/common/multithread.cpp.i
 	$(MAKE) -f CMakeFiles/test_vector_sparse.dir/build.make CMakeFiles/test_vector_sparse.dir/src/common/multithread.cpp.i
 .PHONY : src/common/multithread.cpp.i
 
@@ -284,6 +308,7 @@ src/common/multithread.s: src/common/multithread.cpp.s
 src/common/multithread.cpp.s:
 	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/multithread.cpp.s
 	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/multithread.cpp.s
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/common/multithread.cpp.s
 	$(MAKE) -f CMakeFiles/test_vector_sparse.dir/build.make CMakeFiles/test_vector_sparse.dir/src/common/multithread.cpp.s
 .PHONY : src/common/multithread.cpp.s
 
@@ -294,6 +319,7 @@ src/common/utils.o: src/common/utils.cpp.o
 src/common/utils.cpp.o:
 	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/utils.cpp.o
 	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/utils.cpp.o
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/common/utils.cpp.o
 	$(MAKE) -f CMakeFiles/test_vector_sparse.dir/build.make CMakeFiles/test_vector_sparse.dir/src/common/utils.cpp.o
 .PHONY : src/common/utils.cpp.o
 
@@ -304,6 +330,7 @@ src/common/utils.i: src/common/utils.cpp.i
 src/common/utils.cpp.i:
 	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/utils.cpp.i
 	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/utils.cpp.i
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/common/utils.cpp.i
 	$(MAKE) -f CMakeFiles/test_vector_sparse.dir/build.make CMakeFiles/test_vector_sparse.dir/src/common/utils.cpp.i
 .PHONY : src/common/utils.cpp.i
 
@@ -314,6 +341,7 @@ src/common/utils.s: src/common/utils.cpp.s
 src/common/utils.cpp.s:
 	$(MAKE) -f CMakeFiles/agsvm.dir/build.make CMakeFiles/agsvm.dir/src/common/utils.cpp.s
 	$(MAKE) -f CMakeFiles/sparse_agsvm.dir/build.make CMakeFiles/sparse_agsvm.dir/src/common/utils.cpp.s
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/common/utils.cpp.s
 	$(MAKE) -f CMakeFiles/test_vector_sparse.dir/build.make CMakeFiles/test_vector_sparse.dir/src/common/utils.cpp.s
 .PHONY : src/common/utils.cpp.s
 
@@ -749,6 +777,30 @@ src/retin/toolbox/imcodec/ImageCodecPNG.cpp.s:
 	$(MAKE) -f CMakeFiles/retin_imcodec.dir/build.make CMakeFiles/retin_imcodec.dir/src/retin/toolbox/imcodec/ImageCodecPNG.cpp.s
 .PHONY : src/retin/toolbox/imcodec/ImageCodecPNG.cpp.s
 
+src/test_classifier.o: src/test_classifier.cpp.o
+.PHONY : src/test_classifier.o
+
+# target to build an object file
+src/test_classifier.cpp.o:
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/test_classifier.cpp.o
+.PHONY : src/test_classifier.cpp.o
+
+src/test_classifier.i: src/test_classifier.cpp.i
+.PHONY : src/test_classifier.i
+
+# target to preprocess a source file
+src/test_classifier.cpp.i:
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/test_classifier.cpp.i
+.PHONY : src/test_classifier.cpp.i
+
+src/test_classifier.s: src/test_classifier.cpp.s
+.PHONY : src/test_classifier.s
+
+# target to generate assembly for a file
+src/test_classifier.cpp.s:
+	$(MAKE) -f CMakeFiles/test_classifier.dir/build.make CMakeFiles/test_classifier.dir/src/test_classifier.cpp.s
+.PHONY : src/test_classifier.cpp.s
+
 src/vector_sparse/MatrixSparse.o: src/vector_sparse/MatrixSparse.cpp.o
 .PHONY : src/vector_sparse/MatrixSparse.o
 
@@ -837,6 +889,7 @@ help:
 	@echo "... retin_core"
 	@echo "... retin_imcodec"
 	@echo "... sparse_agsvm"
+	@echo "... test_classifier"
 	@echo "... test_vector_sparse"
 	@echo "... src/common/math.o"
 	@echo "... src/common/math.i"
@@ -907,6 +960,9 @@ help:
 	@echo "... src/retin/toolbox/imcodec/ImageCodecPNG.o"
 	@echo "... src/retin/toolbox/imcodec/ImageCodecPNG.i"
 	@echo "... src/retin/toolbox/imcodec/ImageCodecPNG.s"
+	@echo "... src/test_classifier.o"
+	@echo "... src/test_classifier.i"
+	@echo "... src/test_classifier.s"
 	@echo "... src/vector_sparse/MatrixSparse.o"
 	@echo "... src/vector_sparse/MatrixSparse.i"
 	@echo "... src/vector_sparse/MatrixSparse.s"

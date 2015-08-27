@@ -37,7 +37,7 @@ int CATEGORY = get_config("CATEGORY", 1);
 
 float LAMBDA = get_config("LAMBDA", 0.1);
 
-int T_MAX = get_config("T_MAX", 2000000*N);
+int T_MAX = get_config("T_MAX", 20000000*N);
 bool ADD_BIAS = get_config("ADD_BIAS", true);
 int NB_NEIGHBORS = get_config("NB_NEIGHBORS", -1);
 int NB_EDGES = 0;
@@ -690,6 +690,8 @@ void init() {
 	DBGV(N);
 	DBGV(D);
 	DBGV(n);
+	DBGV(X_test.width);
+	DBGV(X_test.height);
 	sleep(1);
 }
 
