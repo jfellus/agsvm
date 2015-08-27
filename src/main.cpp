@@ -63,6 +63,25 @@ int E_END = get_config("E_END", T_MAX*NB_MESSAGES*N);
 
 string PREFIX = get_config_str("PREFIX", "");
 
+
+#include <time.h>
+#include <unistd.h>
+#include <sys/time.h>
+static struct timeval ts;
+bool tic(size_t ms) {
+	struct timeval tv;
+	gettimeofday(&tv, 0);
+	float dt = (tv.tv_sec-ts.tv_sec)*1000 + 0.001*(tv.tv_usec-ts.tv_usec);
+	if(dt > ms) {
+		ts = tv;
+		return true;
+	}
+	return false;
+}
+int TICTIC = 1000;
+
+
+
 //////////
 // DATA //
 //////////
@@ -565,9 +584,8 @@ string fE, fEstddev;
 std::ofstream ffE, ffEstddev;
 
 void dump_classifier() {
-	FILE* f = fopen(fmt("data/classifier_%u.txt", t), "w");
-	fprintf(f, "%f %f %f", node[0].w[0], node[0].w[1], node[0].b);
-	fclose(f);
+	static int i=0;
+	node[0].w.write(TOSTRING("data/w/" << i << ".txt").c_str());
 }
 
 void compute_errors() {
@@ -595,7 +613,7 @@ void compute_errors() {
 	//	ffEstddev.flush();
 	//	setenv("GSVM_E_", avgcost);
 	}
-	//dump_classifier();
+	dump_classifier();
 }
 
 bool file_exists(const char* s) {
@@ -615,6 +633,8 @@ string newfilename(const char* s) {
 void init() {
 	DBG("INIT");
 	DBGV(NBTHREADS);
+
+	shell("mkdir -p data/w");
 
 	//	system("rm -rf data/*");
 	shell("rm -rf plots/*");
@@ -731,10 +751,11 @@ int main(int argc, char **argv) {
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
 		int NN = N; if(NN>50) NN=50;
-		if(t%N==0) {
-			compute_errors();
+
+		if(tic(TICTIC)) {
+			FILE* f = fopen("TICTIC", "r"); if(f) {fscanf(f, "%u", &TICTIC); fclose(f);}
 			DBG("t=" << (N==1 ? t : nbgradients_evaluated/N));
-		//	setenv("GSVM_T_", (N==1 ? t : nbgradients_evaluated));
+			compute_errors();
 		}
 	}
 
