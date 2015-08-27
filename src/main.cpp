@@ -607,7 +607,7 @@ void compute_errors() {
 		avgcost /= N;
 		cost2 /= N;
 
-		ffE << ((float)nbgradients_evaluated/::N) << " " << avgcost << "\n";
+		ffE << (t) << " " << avgcost << "\n";
 	//	ffEstddev << ((float)nbgradients_evaluated/::N) << " " << sqrt(cost2 - avgcost*avgcost) << "\n";
 		ffE.flush();
 	//	ffEstddev.flush();
@@ -682,7 +682,8 @@ void init() {
 
 		if(ADD_BIAS) {
 			Matrix X_test_nobias;
-			X_test_nobias.load(dataset.c_str());
+			X_test_nobias.load(dataset_test.c_str());
+			X_test.create(X_test_nobias.width+1,X_test_nobias.height);
 			for(int i=0; i<X_test.height; i++) {
 				memcpy(X_test.get_row(i),X_test_nobias.get_row(i),X_test_nobias.width*sizeof(float));
 				X_test[i*X_test.width + X_test_nobias.width] = 1;
@@ -690,9 +691,9 @@ void init() {
 		}
 		else X_test.load(dataset_test.c_str());
 		y_test.load(labels_test.c_str());
-		if(CATEGORY != -1) {
-			for(int i=0; i<y.height; i++) y[i] = y[i]==CATEGORY ? 1 : -1;
-		}
+//		if(CATEGORY != -1) {
+//			for(int i=0; i<y.height; i++) y[i] = y[i]==CATEGORY ? 1 : -1;
+//		}
 	}
 //	if(LIMIT_NDATA!=-1 && X.height > LIMIT_NDATA) X.height = LIMIT_NDATA;
 	n = X.height;
