@@ -255,7 +255,7 @@ public:
 
 
 	void pegasos() {
-		SGD(LEARNING_RATE/(LAMBDA*iterations)); // Except learning rate, its a classical SGD (projection ?)
+		SGD(LEARNING_RATE/(iterations)); // Except learning rate, its a classical SGD (projection ?)
 	}
 
 	int* shuffled_indices;
