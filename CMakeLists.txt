@@ -43,6 +43,7 @@ add_library(retin_imcodec ${imcodec_sources})
 add_executable(agsvm src/main.cpp ${common_sources})
 add_executable(sparse_agsvm src/main_sparse.cpp ${common_sources} src/vector_sparse/VectorSparse.cpp  src/vector_sparse/MatrixSparse.cpp )
 add_executable(test_classifier src/test_classifier.cpp ${common_sources})
+add_executable(fvec_l2normalize src/fvec_l2normalize.cpp ${common_sources})
 
 
 
@@ -50,6 +51,7 @@ set(retin_libs pthread retin_core retin_algebra retin_imcodec)
 
 target_link_libraries(agsvm ${retin_libs})
 target_link_libraries(test_classifier ${retin_libs})
+target_link_libraries(fvec_l2normalize ${retin_libs})
 target_link_libraries(sparse_agsvm ${retin_libs})
 
 
@@ -58,6 +60,7 @@ if(PNG_FOUND)
 	include_directories(${PNG_INCLUDE_DIR})
 	target_link_libraries(agsvm ${PNG_LIBRARIES} )
 	target_link_libraries(test_classifier ${PNG_LIBRARIES} )
+		target_link_libraries(fvec_l2normalize ${PNG_LIBRARIES} )
 	target_link_libraries(sparse_agsvm ${PNG_LIBRARIES} )
 	add_definitions(-DRETIN_ENABLE_PNG)
 endif(PNG_FOUND)
@@ -67,6 +70,7 @@ if(JPEG_FOUND)
 	include_directories(${JPEG_INCLUDE_DIR})
 	target_link_libraries(agsvm ${JPEG_LIBRARIES} )
 	target_link_libraries(test_classifier ${JPEG_LIBRARIES} )
+	target_link_libraries(fvec_l2normalize ${JPEG_LIBRARIES} )
 	target_link_libraries(sparse_agsvm ${JPEG_LIBRARIES} )
 	add_definitions(-DRETIN_ENABLE_JPEG)
 endif(JPEG_FOUND)
