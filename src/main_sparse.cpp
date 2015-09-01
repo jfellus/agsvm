@@ -104,7 +104,7 @@ public:
 
 	Node() {
 		curi = 0; shuffled_indices = 0;nbNeighbors = 0;neighbors = 0;isample = 0;
-		this->id = __node_last_id++; iterations = 1; b=cost=n=0;
+		this->id = __node_last_id++; iterations = 3; b=cost=n=0;
 	}
 
 	void init(MatrixSparse& X, Matrix& y, int first, int n) {
