@@ -341,7 +341,7 @@ public:
 			weight = 0;
 		}
 
-		if(weight>0.00001) for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/weight*averagedGradient[d];
+		if(weight>0.00001) for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate*averagedGradient[d];
 
 		int i = draw_sample();
 		float* sample = X.get_row(i);
