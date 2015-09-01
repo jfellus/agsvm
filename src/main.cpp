@@ -233,14 +233,14 @@ public:
 		float* sample = X.get_row(i);
 
 		// Gradient for l2-regularized hinge loss
-		if(TRICK_LAMBDA_MUL) trick_lambda_mul(sample, i);
-		else {
+//		if(TRICK_LAMBDA_MUL) trick_lambda_mul(sample, i);
+//		else {
 			if( hinge_loss(sample, y[i],w) > 0) {
 				for(int d=0; d<D; d++) w[d] -= learningRate * (LAMBDA*w[d] - y[i]*sample[d]);
 			} else {
 				for(int d=0; d<D; d++) w[d] -= learningRate * LAMBDA * w[d];
 			}
-		}
+//		}
 	}
 
 	float mul;
@@ -255,7 +255,7 @@ public:
 
 
 	void pegasos() {
-		SGD(LEARNING_RATE/(iterations)); // Except learning rate, its a classical SGD (projection ?)
+		SGD(1/(LAMBDA*iterations)); // Except learning rate, its a classical SGD (projection ?)
 	}
 
 	int* shuffled_indices;
