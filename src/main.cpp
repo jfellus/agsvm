@@ -761,7 +761,7 @@ int main(int argc, char **argv) {
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
 		if(tic(TICTIC)) {
-			FILE* f = fopen("TICTIC", "r"); if(f) {fscanf(f, "%u", &TICTIC); fclose(f);}
+			FILE* f = fopen("TICTIC", "r"); if(f) {fscanf(f, "%d", &TICTIC); fclose(f);}
 			DBG("t=" << ((float)nbgradients_evaluated/N));
 			compute_errors();
 		}
