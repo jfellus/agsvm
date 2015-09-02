@@ -61,7 +61,10 @@ int E_START = get_config("E_START", 1);
 int E_END = get_config("E_END", T_MAX*NB_MESSAGES*N);
 
 
-string PREFIX = get_config_str("PREFIX", "");
+string PREFIX = get_config_str("PREFIX", "/");
+
+bool B_DBG_W = get_config("DBG_W", false);
+bool B_DBG_TEST_ERROR = get_config("DBG_TEST_ERROR", true);
 
 
 
@@ -598,36 +601,37 @@ void dump_classifier() {
 }
 
 void compute_errors() {
+	if(B_DBG_TEST_ERROR) {
+		if(N==1) {
+			for(int i=0; i<N; i++) node[i].compute_estimate();
+			fappend(fE, fmt("%u %f\n", t, node[0].cost));
+			setenv("GSVM_E_", node[0].cost);
+		} else {
+			double avgcost = 0;
+			double cost2 = 0;
+			int N = ::N > 1 ? 100 : ::N;
+			for(int i=0; i<N; i++) node[i].compute_estimate();
+			for(int i=0; i<N; i++) {
+				avgcost += node[i].cost;
+				cost2 += node[i].cost * node[i].cost;
+			}
 
-	if(N==1) {
-		for(int i=0; i<N; i++) node[i].compute_estimate();
-		fappend(fE, fmt("%u %f\n", t, node[0].cost));
-		setenv("GSVM_E_", node[0].cost);
-	} else {
-		double avgcost = 0;
-		double cost2 = 0;
-		int N = ::N > 1 ? 100 : ::N;
-		for(int i=0; i<N; i++) node[i].compute_estimate();
-		for(int i=0; i<N; i++) {
-			avgcost += node[i].cost;
-			cost2 += node[i].cost * node[i].cost;
+			avgcost /= N;
+			cost2 /= N;
+
+	//		int i= rand()%N;
+	//		node[i].compute_estimate();
+	//		double avgcost = node[i].cost;
+
+
+			ffE << ((float)nbgradients_evaluated/::N) << " " << avgcost << "\n";
+		//	ffEstddev << ((float)nbgradients_evaluated/::N) << " " << sqrt(cost2 - avgcost*avgcost) << "\n";
+			ffE.flush();
+		//	ffEstddev.flush();
+		//	setenv("GSVM_E_", avgcost);
 		}
-
-		avgcost /= N;
-		cost2 /= N;
-
-//		int i= rand()%N;
-//		node[i].compute_estimate();
-//		double avgcost = node[i].cost;
-
-
-		ffE << ((float)nbgradients_evaluated/::N) << " " << avgcost << "\n";
-	//	ffEstddev << ((float)nbgradients_evaluated/::N) << " " << sqrt(cost2 - avgcost*avgcost) << "\n";
-		ffE.flush();
-	//	ffEstddev.flush();
-	//	setenv("GSVM_E_", avgcost);
 	}
-	dump_classifier();
+	if(B_DBG_W) dump_classifier();
 }
 
 bool file_exists(const char* s) {
@@ -649,22 +653,24 @@ void init() {
 	DBGV(NBTHREADS);
 
 	shell("mkdir -p data/w");
+	shell(TOSTRING("mkdir -p data" << PREFIX));
+	shell(TOSTRING("mkdir -p data" << PREFIX << "/w"));
 
 	//	system("rm -rf data/*");
 	shell("rm -rf plots/*");
 	if(ALGO=="STAG" || ALGO=="STAGR") {
 		if(N==1) {
-		fE = newfilename(fmt("data/E_%s_N%u_%u_%f_%%u.txt", ALGO.c_str(),N, STAG_BUFFER_SIZE, LEARNING_RATE));
-		fEstddev = newfilename(fmt("data/DEV_%s_%u_%f_%%u.txt", ALGO.c_str(), STAG_BUFFER_SIZE, LEARNING_RATE));
+		fE = newfilename(fmt("data%sE_%s_N%u_%u_%f_%%u.txt", PREFIX.c_str(), ALGO.c_str(),N, STAG_BUFFER_SIZE, LEARNING_RATE));
+		fEstddev = newfilename(fmt("data%sDEV_%s_%u_%f_%%u.txt", PREFIX.c_str(), ALGO.c_str(), STAG_BUFFER_SIZE, LEARNING_RATE));
 		} else {
-			shell(fmt("mkdir -p data/N%u", N));
-			shell(fmt("mkdir -p data/N%u/stddev", N));
-			fE = newfilename(fmt("data/N%u/E_%s_N%u_%u_%f_%%u.txt", N, ALGO.c_str(), N, STAG_BUFFER_SIZE, LEARNING_RATE));
-			fEstddev = newfilename(fmt("data/N%u/stddev/DEV_%s_N%u_%u_%f_%%u.txt", N, ALGO.c_str(), N, STAG_BUFFER_SIZE, LEARNING_RATE));
+			shell(fmt("mkdir -p data%sN%u", PREFIX.c_str(), N));
+			shell(fmt("mkdir -p data%sN%u/stddev", PREFIX.c_str(), N));
+			fE = newfilename(fmt("data%sN%u/E_%s_N%u_%u_%f_%%u.txt", PREFIX.c_str(), N, ALGO.c_str(), N, STAG_BUFFER_SIZE, LEARNING_RATE));
+			fEstddev = newfilename(fmt("data%sN%u/stddev/DEV_%s_N%u_%u_%f_%%u.txt", PREFIX.c_str(), N, ALGO.c_str(), N, STAG_BUFFER_SIZE, LEARNING_RATE));
 		}
 	}
 	else {
-		fE = newfilename(fmt("data/E_%s_N%u_%f_M%f_%%u.txt", ALGO.c_str(), N, LEARNING_RATE, NB_MESSAGES));
+		fE = newfilename(fmt("data%sE_%s_N%u_%f_M%f_%%u.txt", PREFIX.c_str(), ALGO.c_str(), N, LEARNING_RATE, NB_MESSAGES));
 //		fEstddev = newfilename(fmt("data/DEV_%s_N%u_%f_%%u.txt", ALGO.c_str(), N, LEARNING_RATE));
 		ffE.open(fE, ios_base::app);
 //		ffEstddev.open(fEstddev, ios_base::app);
