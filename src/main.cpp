@@ -516,7 +516,7 @@ public:
 	}
 
 	int send(Node& node) {
-		if(weight<10e-7) return 0;
+		//if(weight<10e-7) return 0;
 		weight *= 0.5;
 		for(int d=0; d<D; d++) averagedGradient[d] *= 0.5;
 		node.receive(id);
