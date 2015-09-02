@@ -762,6 +762,7 @@ int main(int argc, char **argv) {
 		node[last_sender].iteration();
 		if(tic(TICTIC)) {
 			FILE* f = fopen("TICTIC", "r"); if(f) {fscanf(f, "%d", &TICTIC); fclose(f);}
+			DBGV(TICTIC);
 			DBG("t=" << ((float)nbgradients_evaluated/N));
 			compute_errors();
 		}
