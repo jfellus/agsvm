@@ -101,7 +101,7 @@ bool tic(int ms) {
 	}
 	return false;
 	} else {
-		return t%(-ms)==0;
+		return (nbgradients_evaluated)%(-ms*N)==0;
 	}
 }
 int TICTIC = 1000;
