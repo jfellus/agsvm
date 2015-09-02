@@ -608,7 +608,7 @@ void compute_errors() {
 		avgcost /= N;
 		cost2 /= N;
 
-		ffE << (t) << " " << avgcost << "\n";
+		ffE << ((float)nbgradients_evaluated/::N) << " " << avgcost << "\n";
 	//	ffEstddev << ((float)nbgradients_evaluated/::N) << " " << sqrt(cost2 - avgcost*avgcost) << "\n";
 		ffE.flush();
 	//	ffEstddev.flush();
