@@ -64,22 +64,6 @@ int E_END = get_config("E_END", T_MAX*NB_MESSAGES*N);
 string PREFIX = get_config_str("PREFIX", "");
 
 
-#include <time.h>
-#include <unistd.h>
-#include <sys/time.h>
-static struct timeval ts;
-bool tic(size_t ms) {
-	struct timeval tv;
-	gettimeofday(&tv, 0);
-	float dt = (tv.tv_sec-ts.tv_sec)*1000 + 0.001*(tv.tv_usec-ts.tv_usec);
-	if(dt > ms) {
-		ts = tv;
-		return true;
-	}
-	return false;
-}
-int TICTIC = 1000;
-
 
 
 //////////
@@ -100,6 +84,30 @@ int nbgradients_evaluated = 0;
 
 //////////////////////
 
+
+
+#include <time.h>
+#include <unistd.h>
+#include <sys/time.h>
+static struct timeval ts;
+bool tic(size_t ms) {
+	if(ms>0) {
+	struct timeval tv;
+	gettimeofday(&tv, 0);
+	float dt = (tv.tv_sec-ts.tv_sec)*1000 + 0.001*(tv.tv_usec-ts.tv_usec);
+	if(dt > ms) {
+		ts = tv;
+		return true;
+	}
+	return false;
+	} else {
+		return t%(-ms)==0;
+	}
+}
+int TICTIC = 1000;
+
+
+///////////////////////
 
 #include "algebra.cpp"
 int __node_last_id = 0;
