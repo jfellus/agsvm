@@ -623,7 +623,7 @@ void compute_errors() {
 	//		node[i].compute_estimate();
 	//		double avgcost = node[i].cost;
 
-
+			DBG("ZOB");
 			ffE << ((float)nbgradients_evaluated/::N) << " " << avgcost << "\n";
 		//	ffEstddev << ((float)nbgradients_evaluated/::N) << " " << sqrt(cost2 - avgcost*avgcost) << "\n";
 			ffE.flush();
