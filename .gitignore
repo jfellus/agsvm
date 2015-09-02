@@ -13,4 +13,10 @@ sparse_gossip_svm
 test_vector_sparse
 config.propertie*
 /plantaquatix
-
+agsvm
+Makefile
+agsvm
+fvec_l2normalize
+sparse_agsvm
+t.txt 
+test_classifier
