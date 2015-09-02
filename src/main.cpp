@@ -609,7 +609,7 @@ void compute_errors() {
 		} else {
 			double avgcost = 0;
 			double cost2 = 0;
-			int N = ::N > 1 ? 100 : ::N;
+			int N = ::N > 1 ? 10 : ::N;
 			for(int i=0; i<N; i++) node[i].compute_estimate();
 			for(int i=0; i<N; i++) {
 				avgcost += node[i].cost;
@@ -623,7 +623,6 @@ void compute_errors() {
 	//		node[i].compute_estimate();
 	//		double avgcost = node[i].cost;
 
-			DBG("ZOB");
 			ffE << ((float)nbgradients_evaluated/::N) << " " << avgcost << "\n";
 		//	ffEstddev << ((float)nbgradients_evaluated/::N) << " " << sqrt(cost2 - avgcost*avgcost) << "\n";
 			ffE.flush();
