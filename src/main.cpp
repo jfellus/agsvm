@@ -768,6 +768,8 @@ int main(int argc, char **argv) {
 
 	t = 0;
 	compute_errors();
+
+	DBG("start");
 	for(t=1; t/N<T_MAX; t++) {
 		last_sender = gossip_choose_sender();
 		node[last_sender].iteration();
