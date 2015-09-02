@@ -604,21 +604,21 @@ void compute_errors() {
 		fappend(fE, fmt("%u %f\n", t, node[0].cost));
 		setenv("GSVM_E_", node[0].cost);
 	} else {
-//		double avgcost = 0;
-//		double cost2 = 0;
-//		int N = ::N > 1 ? 1 : ::N;
-//		for(int i=0; i<N; i++) node[i].compute_estimate();
-//		for(int i=0; i<N; i++) {
-//			avgcost += node[i].cost;
-//			cost2 += node[i].cost * node[i].cost;
-//		}
-//
-//		avgcost /= N;
-//		cost2 /= N;
+		double avgcost = 0;
+		double cost2 = 0;
+		int N = ::N > 1 ? 100 : ::N;
+		for(int i=0; i<N; i++) node[i].compute_estimate();
+		for(int i=0; i<N; i++) {
+			avgcost += node[i].cost;
+			cost2 += node[i].cost * node[i].cost;
+		}
 
-		int i= rand()%N;
-		node[i].compute_estimate();
-		double avgcost = node[i].cost;
+		avgcost /= N;
+		cost2 /= N;
+
+//		int i= rand()%N;
+//		node[i].compute_estimate();
+//		double avgcost = node[i].cost;
 
 
 		ffE << ((float)nbgradients_evaluated/::N) << " " << avgcost << "\n";
