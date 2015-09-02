@@ -606,7 +606,7 @@ void compute_errors() {
 	} else {
 		double avgcost = 0;
 		double cost2 = 0;
-		int N = ::N > 1 ? 1 : ::N;
+		int N = ::N > 1 ? 10 : ::N;
 		for(int i=0; i<N; i++) node[i].compute_estimate();
 		for(int i=0; i<N; i++) {
 			avgcost += node[i].cost;
