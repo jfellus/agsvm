@@ -101,7 +101,7 @@ bool tic(int ms) {
 	}
 	return false;
 	} else {
-		return (t)%((int)(-ms*N*NB_MESSAGES))==0;
+		return (t)%((int)(-ms*N*NB_MESSAGES/100))==0;
 	}
 }
 int TICTIC = 1000;
