@@ -101,7 +101,6 @@ bool tic(int ms) {
 	}
 	return false;
 	} else {
-		DBG((t)%((int)(-ms*N*NB_MESSAGES)));
 		return (t)%((int)(-ms*N*NB_MESSAGES))==0;
 	}
 }
