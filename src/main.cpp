@@ -654,7 +654,7 @@ void init() {
 
 	shell("mkdir -p data/w");
 	shell(TOSTRING("mkdir -p data" << PREFIX));
-	shell(TOSTRING("mkdir -p data" << PREFIX << "/w"));
+	shell(TOSTRING("mkdir -p data" << PREFIX << "w"));
 
 	//	system("rm -rf data/*");
 	shell("rm -rf plots/*");
@@ -748,7 +748,7 @@ int main(int argc, char **argv) {
 //		DBG("with : " << argv[1]);
 //		dataset = argv[1];
 //		LEARNING_RATE = atof(argv[1]);
-		PREFIX = argv[1];
+//		PREFIX = argv[1];
 		init();
 		//chdir(dirname(argv[1]));
 	}
