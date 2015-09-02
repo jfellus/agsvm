@@ -596,8 +596,8 @@ std::ofstream ffE, ffEstddev;
 
 void dump_classifier() {
 	static int i=0;
-	shell(TOSTRING("mkdir -p data/w/" << ALGO << "/N" << N << "/l" << LEARNING_RATE << "/"));
-	node[0].w.write(TOSTRING("data/w/" << ALGO << "/N" << N << "/l" << LEARNING_RATE << "/" << fmt("%05d",i++) << ".fvec").c_str());
+	shell(TOSTRING("mkdir -p data" << PREFIX << "w/" << ALGO << "/N" << N << "/l" << LEARNING_RATE << "/"));
+	node[0].w.write(TOSTRING("data" << PREFIX << "w/" << ALGO << "/N" << N << "/l" << LEARNING_RATE << "/" << fmt("%05d",i++) << ".fvec").c_str());
 }
 
 void compute_errors() {
