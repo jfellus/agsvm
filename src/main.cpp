@@ -101,8 +101,8 @@ bool tic(int ms) {
 	}
 	return false;
 	} else {
-		DBG((nbgradients_evaluated)%(-ms*N));
-		return (nbgradients_evaluated)%(-ms*N)==0;
+		DBG((t)%((int)(-ms*N*NB_MESSAGES)));
+		return (t)%((int)(-ms*N*NB_MESSAGES))==0;
 	}
 }
 int TICTIC = 1000;
