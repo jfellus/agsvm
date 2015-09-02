@@ -90,7 +90,7 @@ int nbgradients_evaluated = 0;
 #include <unistd.h>
 #include <sys/time.h>
 static struct timeval ts;
-bool tic(size_t ms) {
+bool tic(int ms) {
 	if(ms>0) {
 	struct timeval tv;
 	gettimeofday(&tv, 0);
