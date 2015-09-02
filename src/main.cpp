@@ -188,8 +188,7 @@ public:
 					nbmessages_sent = 0;
 				} else {
 					last_receiver = gossip_choose_receiver();
-					send(node[last_receiver]);
-					nbmessages_sent++;
+					if(send(node[last_receiver])) nbmessages_sent++;
 				}
 			}
 		}
@@ -341,7 +340,7 @@ public:
 			weight = 0;
 		}
 
-		if(weight>0.00001) for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/curbufsize*averagedGradient[d];
+		if(weight>0.00001) for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/weight*averagedGradient[d];
 
 		int i = draw_sample();
 		float* sample = X.get_row(i);
@@ -517,11 +516,11 @@ public:
 	}
 
 	int send(Node& node) {
-		if(weight<10e-5) return 0;
+		if(weight<10e-3) return 0;
 		weight *= 0.5;
 		for(int d=0; d<D; d++) averagedGradient[d] *= 0.5;
 		node.receive(id);
-		return 0;
+		return 1;
 	}
 
 	void receive(int sender) {
