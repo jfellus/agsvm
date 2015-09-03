@@ -540,7 +540,7 @@ public:
 		weight += node[sender].weight;
 		for(int d=0; d<D; d++) averagedGradient[d] += node[sender].averagedGradient[d];
 
-		if(B_UPDATE_ON_RECV && ALGO=="STAG" && weight>1e-5) for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate*averagedGradient[d];
+		if(B_UPDATE_ON_RECV && weight>1e-5) for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate*averagedGradient[d];
 
 	}
 
