@@ -66,6 +66,7 @@ string PREFIX = get_config_str("PREFIX", "/");
 bool B_DBG_W = get_config("DBG_W", false);
 bool B_DBG_TEST_ERROR = get_config("DBG_TEST_ERROR", true);
 
+bool B_UPDATE_ON_RECV = get_config("UPDATE_ON_RECV", false);
 
 
 
@@ -443,7 +444,7 @@ public:
 		}
 
 		// Learn
-		if(weight>0.00001) for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/weight*averagedGradient[d];
+		if(!B_UPDATE_ON_RECV && weight>0.00001) for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/weight*averagedGradient[d];
 
 		int i = draw_sample();
 		float* sample = X.get_row(i);
@@ -538,6 +539,9 @@ public:
 	void receive(int sender) {
 		weight += node[sender].weight;
 		for(int d=0; d<D; d++) averagedGradient[d] += node[sender].averagedGradient[d];
+
+		if(B_UPDATE_ON_RECV && ALGO=="STAG") for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/weight*averagedGradient[d];
+
 	}
 
 
