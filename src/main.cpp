@@ -142,7 +142,7 @@ public:
 
 
 	Node() {
-		nbmessages_sent = 0;
+		nbmessages_sent = NB_MESSAGES;
 		curbufsize = 0;
 		mul = 1;
 		curi = 0; shuffled_indices = 0;nbNeighbors = 0;neighbors = 0;isample = 0;
@@ -540,7 +540,7 @@ public:
 		weight += node[sender].weight;
 		for(int d=0; d<D; d++) averagedGradient[d] += node[sender].averagedGradient[d];
 
-		if(B_UPDATE_ON_RECV && ALGO=="STAG") for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/weight*averagedGradient[d];
+		if(B_UPDATE_ON_RECV && ALGO=="STAG" && weight>1e-5) for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/weight*averagedGradient[d];
 
 	}
 
