@@ -255,6 +255,10 @@ public:
 	}
 
 	void SGD_gossip(float learningRate) {
+		if(!averagedGradient) {
+					averagedGradient.create(D, 1); averagedGradient.clear();
+		}
+
 		int i = draw_sample();
 		float* sample = X.get_row(i);
 
@@ -561,7 +565,10 @@ public:
 	void receive(int sender) {
 		weight += node[sender].weight;
 		if(ALGO=="STAG" || ALGO=="SAG")	for(int d=0; d<D; d++) averagedGradient[d] += node[sender].averagedGradient[d];
-		else for(int d=0; d<D; d++) averagedGradient[d] = node[sender].averagedGradient[d];
+		else for(int d=0; d<D; d++) {
+			averagedGradient[d] = node[sender].averagedGradient[d];
+			weight = 1;
+		}
 
 		if(B_UPDATE_ON_RECV && weight>1e-5) {
 			for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate*averagedGradient[d];
