@@ -595,9 +595,8 @@ string fE, fEstddev;
 std::ofstream ffE, ffEstddev;
 
 void dump_classifier() {
-	static int i=0;
 	shell(TOSTRING("mkdir -p data" << PREFIX << "w/" << ALGO << "/N" << N << "/l" << LEARNING_RATE << "/"));
-	node[0].w.write(TOSTRING("data" << PREFIX << "w/" << ALGO << "/N" << N << "/l" << LEARNING_RATE << "/" << fmt("%05d",i++) << ".fvec").c_str());
+	node[0].w.write(TOSTRING("data" << PREFIX << "w/" << ALGO << "/N" << N << "/l" << LEARNING_RATE << "/" << fmt("%05f",((float)nbgradients_evaluated/::N)) << ".fvec").c_str());
 }
 
 void compute_errors() {
