@@ -254,6 +254,24 @@ public:
 //		}
 	}
 
+	void SGD_gossip(float learningRate) {
+		int i = draw_sample();
+		float* sample = X.get_row(i);
+
+		// Gradient for l2-regularized hinge loss
+//		if(TRICK_LAMBDA_MUL) trick_lambda_mul(sample, i);
+//		else {
+			if( hinge_loss(sample, y[i],w) > 0) {
+				for(int d=0; d<D; d++) averagedGradient[d] = - y[i]*sample[d];
+			} else {
+				for(int d=0; d<D; d++) averagedGradient[d] = 0;
+			}
+//		}
+		for(int d=0; d<D; d++) w[d] -= (1-learningRate*LAMBDA)*w[d] - learningRate*averagedGradient[d];
+	}
+
+
+
 	float mul;
 	void trick_lambda_mul(float* sample, int i) {
 		if( y[i] * vector_ps_float(w, sample, D) * mul < 1) {
@@ -352,7 +370,7 @@ public:
 			weight = 0;
 		}
 
-		if(weight>0.00001) for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/weight*averagedGradient[d];
+		if(!B_UPDATE_ON_RECV && weight>0.00001) for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/weight*averagedGradient[d];
 
 		int i = draw_sample();
 		float* sample = X.get_row(i);
@@ -514,8 +532,10 @@ public:
 	void optimize_gossip() {
 		if(ALGO=="STAG") {
 			STAG_gossip(LEARNING_RATE);
-		} else {
+		} else if(ALGO=="SAG"){
 			SAG_gossip(LEARNING_RATE);
+		} else if(ALGO=="SGD") {
+			SGD_gossip(LEARNING_RATE);
 		}
 	}
 
@@ -530,17 +550,22 @@ public:
 
 	int send(Node& node) {
 		//if(weight<10e-7) return 0;
-		weight *= 0.5;
-		for(int d=0; d<D; d++) averagedGradient[d] *= 0.5;
+		if(ALGO!="SGD") {
+			weight *= 0.5;
+			for(int d=0; d<D; d++) averagedGradient[d] *= 0.5;
+		}
 		node.receive(id);
 		return 1;
 	}
 
 	void receive(int sender) {
 		weight += node[sender].weight;
-		for(int d=0; d<D; d++) averagedGradient[d] += node[sender].averagedGradient[d];
+		if(ALGO=="STAG" || ALGO=="SAG")	for(int d=0; d<D; d++) averagedGradient[d] += node[sender].averagedGradient[d];
+		else for(int d=0; d<D; d++) averagedGradient[d] = node[sender].averagedGradient[d];
 
-		if(B_UPDATE_ON_RECV && weight>1e-5) for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate*averagedGradient[d];
+		if(B_UPDATE_ON_RECV && weight>1e-5) {
+			for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate*averagedGradient[d];
+		}
 
 	}
 
