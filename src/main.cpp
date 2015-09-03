@@ -665,6 +665,7 @@ void init() {
 			fE = newfilename(fmt("data%sN%u/E_%s_N%u_%u_%f_%%u.txt", PREFIX.c_str(), N, ALGO.c_str(), N, STAG_BUFFER_SIZE, LEARNING_RATE));
 			fEstddev = newfilename(fmt("data%sN%u/stddev/DEV_%s_N%u_%u_%f_%%u.txt", PREFIX.c_str(), N, ALGO.c_str(), N, STAG_BUFFER_SIZE, LEARNING_RATE));
 		}
+		ffE.open(fE, ios_base::app);
 	}
 	else {
 		fE = newfilename(fmt("data%sE_%s_N%u_%f_M%f_%%u.txt", PREFIX.c_str(), ALGO.c_str(), N, LEARNING_RATE, NB_MESSAGES));
