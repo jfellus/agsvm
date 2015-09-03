@@ -571,7 +571,7 @@ public:
 		}
 
 		if(B_UPDATE_ON_RECV && weight>1e-5) {
-			for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate*averagedGradient[d];
+			for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - LEARNING_RATE*averagedGradient[d];
 		}
 
 	}
