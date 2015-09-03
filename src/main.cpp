@@ -504,6 +504,7 @@ public:
 		else if(ALGO=="SGD") SGD(LEARNING_RATE);
 
 		iterations++;
+		nbgradients_evaluated++;
 
 		// Compute average w (for Dual Averaging etc...)
 		//for(int d = 0; d < D; d ++) w_avg[d] = w_avg[d] * (iterations-1.0)/iterations + 1.0/iterations * w[d];
@@ -601,14 +602,9 @@ void dump_classifier() {
 
 void compute_errors() {
 	if(B_DBG_TEST_ERROR) {
-		if(N==1) {
-			for(int i=0; i<N; i++) node[i].compute_estimate();
-			fappend(fE, fmt("%u %f\n", t, node[0].cost));
-			setenv("GSVM_E_", node[0].cost);
-		} else {
 			double avgcost = 0;
 			double cost2 = 0;
-			int N = ::N > 1 ? 10 : ::N;
+			int N = ::N > 1 ? 1 : ::N;
 			for(int i=0; i<N; i++) node[i].compute_estimate();
 			for(int i=0; i<N; i++) {
 				avgcost += node[i].cost;
@@ -627,7 +623,6 @@ void compute_errors() {
 			ffE.flush();
 		//	ffEstddev.flush();
 		//	setenv("GSVM_E_", avgcost);
-		}
 	}
 	if(B_DBG_W) dump_classifier();
 }
