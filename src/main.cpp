@@ -596,7 +596,7 @@ string fE, fEstddev;
 std::ofstream ffE, ffEstddev;
 
 string fmt_padd_float(float f) {
-	return fmt("%08.3f",f);
+	return fmt("%012.3f",f);
 }
 
 void dump_classifier() {
