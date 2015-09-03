@@ -80,8 +80,6 @@ Matrix y; // Labels
 Matrix X_test; // Test sample
 Matrix y_test; // Test labels
 
-float learningRate = 1;
-
 
 int t = 0;
 int nbgradients_evaluated = 0;
@@ -279,10 +277,10 @@ public:
 	float mul;
 	void trick_lambda_mul(float* sample, int i) {
 		if( y[i] * vector_ps_float(w, sample, D) * mul < 1) {
-			for(int d=0; d<D; d++) w[d] = w[d]*mul - learningRate * (LAMBDA*w[d] - y[i]*sample[d]);
+			for(int d=0; d<D; d++) w[d] = w[d]*mul - LEARNING_RATE * (LAMBDA*w[d] - y[i]*sample[d]);
 			mul = 1;
 		} else {
-			mul *= (1 - learningRate * LAMBDA);
+			mul *= (1 - LEARNING_RATE * LAMBDA);
 		}
 	}
 
@@ -571,7 +569,7 @@ public:
 		}
 
 		if(B_UPDATE_ON_RECV && weight>1e-5) {
-			for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - LEARNING_RATE*averagedGradient[d];
+			for(int d=0; d<D; d++) w[d] = (1-LEARNING_RATE*LAMBDA)*w[d] - LEARNING_RATE*averagedGradient[d];
 		}
 
 	}
