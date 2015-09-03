@@ -269,7 +269,7 @@ public:
 				for(int d=0; d<D; d++) averagedGradient[d] = 0;
 			}
 //		}
-		for(int d=0; d<D; d++) w[d] -= (1-learningRate*LAMBDA)*w[d] - learningRate*averagedGradient[d];
+		for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate*averagedGradient[d];
 	}
 
 
