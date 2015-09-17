@@ -138,8 +138,8 @@ string fmt_padd_float(float f) {
 }
 
 void dump_classifier() {
-	shell(TOSTRING("mkdir -p data" << PREFIX << "w/" << ALGO << "/N" << N << "/S" << STAG_BUFFER_SIZE << "/l" << LEARNING_RATE << "/"));
-	node[0].w.write(TOSTRING("data" << PREFIX << "w/" << ALGO << "/N" << N << "/S" << STAG_BUFFER_SIZE << "/l" << LEARNING_RATE << "/" << fmt_padd_float((((float)nbgradients_evaluated/::N))) << ".fvec").c_str());
+	shell(TOSTRING("mkdir -p data" << PREFIX << "w/" << ALGO << "/N" << N << "/M" << NB_MESSAGES << "/l" << LEARNING_RATE << "/"));
+	node[0].w.write(TOSTRING("data" << PREFIX << "w/" << ALGO << "/N" << N << "/M" << NB_MESSAGES << "/l" << LEARNING_RATE << "/" << fmt_padd_float((((float)nbgradients_evaluated/::N))) << ".fvec").c_str());
 }
 
 
