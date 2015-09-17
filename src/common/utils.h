@@ -96,6 +96,6 @@ string get_config_str(const char* what, const char* default_val);
 void setenv(const char* name, int val);
 void setenv(const char* name, double val);
 
-
+inline void sys(const std::string& s) {int r = system(s.c_str()); (void)r;}
 
 #endif /* UTILS_H_ */

@@ -40,7 +40,7 @@ add_library(retin_algebra ${algebra_sources})
 add_library(retin_core ${core_sources} ${document_sources})
 add_library(retin_imcodec ${imcodec_sources})
 
-add_executable(agsvm src/main.cpp ${common_sources})
+add_executable(agsvm src/agsvm.cpp ${common_sources})
 add_executable(sparse_agsvm src/main_sparse.cpp ${common_sources} src/vector_sparse/VectorSparse.cpp  src/vector_sparse/MatrixSparse.cpp )
 add_executable(test_classifier src/test_classifier.cpp ${common_sources})
 add_executable(fvec_l2normalize src/fvec_l2normalize.cpp ${common_sources})
