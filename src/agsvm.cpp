@@ -183,6 +183,63 @@ public:
 
 	}
 
+	Matrix averagedGradient;
+	Matrix gradientsMemory;
+	int curbufsize;
+	void SAG(float learningRate) {
+		if(!gradientsMemory) {
+			gradientsMemory.create(D, n); gradientsMemory.clear();
+			averagedGradient.create(D, 1); averagedGradient.clear();
+			curbufsize = 0;
+		}
+
+		int i = draw_sample();
+		float* sample = X.get_row(i);
+
+		// Update averaged gradient
+		vector_sub_float(averagedGradient,gradientsMemory.get_row(i), D);
+		if( hinge_loss(sample, y[i],w) > 0) {
+			for(int d=0; d<D; d++) gradientsMemory[i*D + d] = - y[i]*sample[d];
+		} else {
+			for(int d=0; d<D; d++) gradientsMemory[i*D + d] = 0;
+		}
+		vector_add_float(averagedGradient,gradientsMemory.get_row(i), D);
+
+		if(curbufsize < n) curbufsize++;
+
+		// Learn
+		for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/curbufsize*averagedGradient[d];
+	}
+
+
+	void SAG_gossip(float learningRate) {
+		if(!gradientsMemory) {
+			gradientsMemory.create(D, n); gradientsMemory.clear();
+			averagedGradient.create(D, 1); averagedGradient.clear();
+			curbufsize = 0;
+		}
+
+		int i = draw_sample();
+		float* sample = X.get_row(i);
+
+		// Update averaged gradient
+		vector_sub_float(averagedGradient,gradientsMemory.get_row(i), D);
+		if( hinge_loss(sample, y[i],w) > 0) {
+			for(int d=0; d<D; d++) gradientsMemory[i*D + d] = - y[i]*sample[d];
+		} else {
+			for(int d=0; d<D; d++) gradientsMemory[i*D + d] = 0;
+		}
+		vector_add_float(averagedGradient,gradientsMemory.get_row(i), D);
+
+		if(curbufsize < n) curbufsize++;
+
+		// Learn
+	//	for(int d=0; d<D; d++) w[d] *= (1 - learningRate * LAMBDA);
+		for(int d=0; d<D; d++) s[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/curbufsize*averagedGradient[d];
+		for(int d=0; d<D; d++) w[d] = s[d]/weight;
+
+	}
+
 	void SGD_gossip(float learningRate) {
 		int i = draw_sample();
 		float* sample = X.get_row(i);
@@ -202,12 +259,12 @@ public:
 	//////////
 
 	void optimize() {
-		SGD(LEARNING_RATE);
+		SAG(LEARNING_RATE);
 		nbgradients_evaluated++;
 	}
 
 	void optimize_gossip() {
-		SGD_gossip(LEARNING_RATE);
+		SAG_gossip(LEARNING_RATE);
 		nbgradients_evaluated++;
 	}
 
