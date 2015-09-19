@@ -208,7 +208,7 @@ public:
 		if(curbufsize < n) curbufsize++;
 
 		// Learn
-		for(int d=0; d<D; d++) w[d] = (1-learningRate*LAMBDA)*w[d] - learningRate/curbufsize*averagedGradient[d];
+		for(int d=0; d<D; d++) w[d] -= learningRate*(LAMBDA*w[d] - averagedGradient[d]);
 	}
 
 
