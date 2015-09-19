@@ -258,13 +258,16 @@ public:
 	// FLOW //
 	//////////
 
+	int iterations = 1;
 	void optimize() {
-		SAG(LEARNING_RATE);
+		//SAG(LEARNING_RATE);
+		SGD(1/(LAMBDA*iterations));
 		nbgradients_evaluated++;
+		iterations++;
 	}
 
 	void optimize_gossip() {
-		SAG_gossip(LEARNING_RATE);
+		//SAG_gossip(LEARNING_RATE);
 		nbgradients_evaluated++;
 	}
 
