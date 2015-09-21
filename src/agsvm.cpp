@@ -261,7 +261,7 @@ public:
 	int iterations = 1;
 	void optimize() {
 		//SAG(LEARNING_RATE);
-		SGD(0.1/pow(iterations,1/4.0));
+		SGD(1/pow(iterations,1/3.0));
 		nbgradients_evaluated++;
 		iterations++;
 	}
