@@ -222,9 +222,11 @@ void init() {
 		}
 		else X_test.load(dataset_test.c_str());
 		y_test.load(labels_test.c_str());
-//		if(CATEGORY != -1) {
-//			for(int i=0; i<y.height; i++) y[i] = y[i]==CATEGORY ? 1 : -1;
-//		}
+
+		if(CATEGORY != -1) {
+			for(int i=0; i<y.height; i++) y[i] = y[i]==CATEGORY ? 1 : -1;
+			for(int i=0; i<y_test.height; i++) y_test[i] = y_test[i]==CATEGORY ? 1 : -1;
+		}
 	}
 //	if(LIMIT_NDATA!=-1 && X.height > LIMIT_NDATA) X.height = LIMIT_NDATA;
 	n = X.height;
