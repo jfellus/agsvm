@@ -22,7 +22,8 @@ for i in 100; do
 	sed -i "s|N = .*|N = $N|g" config.properties
 	sed -i "s|LEARNING_RATE = .*|LEARNING_RATE = $l|g" config.properties
 #	sed -i "s|STAG_BUFFER_SIZE = .*|STAG_BUFFER_SIZE = $i|g" config.properties
-	sed -i "s|MESSAGES = .*|MESSAGES = $i|g" config.properties
+	sed -i "s|NB_MESSAGES = .*|NB_MESSAGES = $i|g" config.properties
+	sed -i "s|STAG_BUFFER_SIZE = .*|STAG_BUFFER_SIZE = 100|g" config.properties
 
 	./agsvm & 
 	sleep 0.1
